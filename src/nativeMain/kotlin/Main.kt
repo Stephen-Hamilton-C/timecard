@@ -1,5 +1,5 @@
 import kotlinx.coroutines.runBlocking
-import persistence.Configuration
+import config.Configuration
 
 fun main() = runBlocking<Unit> {
     val config = Configuration.load()
