@@ -1,6 +1,6 @@
 package persistence
 
-import com.soywiz.korio.file.VfsFile
+import appdirs.AppDirs
 import com.soywiz.korio.file.std.localVfs
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
@@ -9,24 +9,27 @@ import kotlinx.serialization.json.Json
 
 @Serializable
 class Configuration(
-    var test: Boolean = true,
+    var test: Int = 0,
 ) {
     companion object {
-        private val PATH = "/home/stephen/.config/timecard/config.json"
+        private val CONFIG_DIR = localVfs(AppDirs.configUserDir("timecard", "Stephen-Hamilton-C"))
+        private val FILE = CONFIG_DIR["config.json"]
 
         suspend fun load(): Configuration {
-            val configFile = localVfs(PATH)
-            if (!configFile.exists()){
-                return Configuration()
+            if (!FILE.exists()) return Configuration()
+            val configData = FILE.readString()
+            return try {
+                Json.decodeFromString(configData)
+            } catch(e: Exception) {
+                FILE.renameTo(CONFIG_DIR["config.json.old"].absolutePath)
+                println("Error while retrieving config! Config has been reset, original file now has the .old postfix if you wish to manually recover the file.")
+                Configuration()
             }
-            val configData = configFile.readString()
-            return Json.decodeFromString(configData)
         }
     }
 
     suspend fun save() {
-        val configFile = localVfs(PATH)
-        configFile.ensureParents()
-        configFile.writeString(Json.encodeToString(this))
+        FILE.ensureParents()
+        FILE.writeString(Json.encodeToString(this))
     }
 }
