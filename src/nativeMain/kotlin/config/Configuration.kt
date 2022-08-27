@@ -3,6 +3,7 @@ package config
 import appdirs.AppDirs
 import com.soywiz.korio.file.std.localVfs
 import core.ClassFileManager
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,14 +13,14 @@ data class Configuration(
     companion object {
         private val _configDir = AppDirs.configUserDir("timecard", "Stephen-Hamilton-C")
 
-        suspend fun load(): Configuration {
+        fun load() = runBlocking {
             val manager = ClassFileManager(localVfs(_configDir)["config.json"])
-            return manager.load(::Configuration)
+            return@runBlocking manager.load(::Configuration)
         }
     }
 
-    suspend fun save() {
+    fun save() = runBlocking {
         val manager = ClassFileManager(localVfs(_configDir)["config.json"])
-        manager.save(this)
+        manager.save(this@Configuration)
     }
 }

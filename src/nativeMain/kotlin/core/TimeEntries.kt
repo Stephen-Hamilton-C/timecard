@@ -17,14 +17,21 @@ class TimeEntries {
 	companion object {
 		private val _dataDir = AppDirs.dataUserDir("timecard", "Stephen-Hamilton-C")
 		
-		suspend fun load(date: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())): TimeEntries {
+		fun load(date: LocalDate = Util.TODAY) = runBlocking {
 			val manager = ClassFileManager(localVfs(_dataDir)["timecard_$date.json"])
-			return manager.load(::TimeEntries)
+			return@runBlocking manager.load(::TimeEntries)
 		}
 	}
 	
-	suspend fun save(date: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())) {
+	fun save(date: LocalDate = Util.TODAY) = runBlocking {
+		// Integrity check
+		for (entry in _entries) {
+			if (entry.endTime == null && entry != _entries.last()) {
+				throw IllegalStateException("A null endTime was found in the middle of entries!")
+			}
+		}
+		
 		val manager = ClassFileManager(localVfs(_dataDir)["timecard_$date.json"])
-		manager.save(this)
+		manager.save(this@TimeEntries)
 	}
 }
