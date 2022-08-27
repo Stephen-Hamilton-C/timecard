@@ -1,7 +1,6 @@
-import kotlinx.coroutines.runBlocking
 import config.Configuration
 
-fun main() = runBlocking<Unit> {
+fun main() {
     val config = Configuration.load()
     config.test++
     config.save()
