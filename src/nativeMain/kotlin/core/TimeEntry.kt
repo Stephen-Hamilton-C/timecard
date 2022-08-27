@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TimeEntry(
 	val startTime: LocalTime,
-	val endTime: LocalTime?,
+	var endTime: LocalTime? = null,
 )
