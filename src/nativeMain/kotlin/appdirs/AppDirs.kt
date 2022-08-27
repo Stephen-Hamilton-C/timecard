@@ -8,18 +8,24 @@ object AppDirs : IAppDirs {
         else -> throw IllegalStateException("Unsupported OS. Expected Windows, macOS, or Linux, but instead found ${Platform.osFamily}")
     }
 
-    fun configUserDir(name: String, author: String): String {
-        return configUserDir(name, author, "")
-    }
     override fun configUserDir(name: String, author: String, version: String): String {
         return _appdirs.configUserDir(name, author, version)
     }
-
-    fun dataUserDir(name: String, author: String): String {
-        return dataUserDir(name, author, "")
+    override fun configUserDir(name: String, author: String): String {
+        return _appdirs.configUserDir(name, author)
     }
+    override fun configUserDir(name: String): String {
+        return _appdirs.configUserDir(name)
+    }
+
     override fun dataUserDir(name: String, author: String, version: String): String {
-        return dataUserDir(name, author, version)
+        return _appdirs.dataUserDir(name, author, version)
+    }
+    override fun dataUserDir(name: String, author: String): String {
+        return _appdirs.dataUserDir(name, author)
+    }
+    override fun dataUserDir(name: String): String {
+        return _appdirs.dataUserDir(name)
     }
 
 }
