@@ -9,11 +9,16 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class TimeEntries {
-	val entries: List<TimeEntry>
-		get() = _entries.toList()
+class TimeEntries(
 	@SerialName("entries")
 	private val _entries: MutableList<TimeEntry> = mutableListOf()
+) {
+	val entries: List<TimeEntry>
+		get() = _entries.toList()
+	
+	init {
+		sanityCheck()
+	}
 	
 	companion object {
 		private val _dataDir = AppDirs.dataUserDir("timecard", "Stephen-Hamilton-C")
@@ -25,15 +30,26 @@ class TimeEntries {
 	}
 	
 	fun save(date: LocalDate = Util.TODAY) = runBlocking {
-		// Integrity check
+		sanityCheck()
+		val manager = ClassFileManager(localVfs(_dataDir)["timecard_$date.json"])
+		manager.save(this@TimeEntries)
+	}
+	
+	private fun sanityCheck() {
 		for (entry in _entries) {
 			if (entry.endTime == null && entry != _entries.last()) {
 				throw IllegalStateException("A null endTime was found in the middle of entries!")
 			}
 		}
-		
-		val manager = ClassFileManager(localVfs(_dataDir)["timecard_$date.json"])
-		manager.save(this@TimeEntries)
+		// TODO: Need to implement checks to ensure no time entries overlap
+	}
+	
+	override fun equals(other: Any?): Boolean {
+		if (other == null) return false
+		if (other is TimeEntries) {
+			return this.entries == other.entries
+		}
+		return false
 	}
 	
 	fun isClockedIn(): Boolean = _entries.size > 0 && _entries.last().endTime == null
