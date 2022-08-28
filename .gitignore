@@ -12,3 +12,9 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
+
+# Intellij
+.idea
+
+# Non-portable Symbolic Link to built executable
+timecard.kexe
