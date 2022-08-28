@@ -36,12 +36,24 @@ class TimeEntries(
 	}
 	
 	private fun sanityCheck() {
+		val times = mutableListOf<LocalTime>()
 		for (entry in _entries) {
 			if (entry.endTime == null && entry != _entries.last()) {
 				throw IllegalStateException("A null endTime was found in the middle of entries!")
 			}
+			times.add(entry.startTime)
+			if (entry.endTime != null) {
+				times.add(entry.endTime!!)
+			}
 		}
-		// TODO: Need to implement checks to ensure no time entries overlap
+		
+		var lastTime: LocalTime? = null
+		for (time in times) {
+			if(lastTime != null && lastTime > time) {
+				throw IllegalStateException("Entries cannot overlap!")
+			}
+			lastTime = time
+		}
 	}
 	
 	override fun equals(other: Any?): Boolean {
@@ -52,7 +64,11 @@ class TimeEntries(
 		return false
 	}
 	
-	fun isClockedIn(): Boolean = _entries.size > 0 && _entries.last().endTime == null
+	override fun hashCode(): Int {
+		return _entries.hashCode()
+	}
+	
+	fun isClockedIn(): Boolean = _entries.isNotEmpty() && _entries.last().endTime == null
 	fun isClockedOut(): Boolean = !isClockedIn()
 	
 	/**
@@ -61,7 +77,8 @@ class TimeEntries(
 	 */
 	fun clockIn(time: LocalTime = Util.NOW) {
 		if (isClockedIn()) throw IllegalStateException("Already clocked in!")
-		if (_entries.size > 0 && time < _entries.last().endTime!!)
+		// We are clocked in, so endTime must exist, otherwise this TimeEntries has lost sanity
+		if (_entries.isNotEmpty() && time < _entries.last().endTime!!)
 			throw IllegalStateException("Clock in time is before last clock out time!")
 		
 		_entries.add(TimeEntry(time))
@@ -80,7 +97,7 @@ class TimeEntries(
 	}
 	
 	fun undo() {
-		if (_entries.size == 0) throw IllegalStateException("Nothing left to undo!")
+		if (_entries.isEmpty()) throw IllegalStateException("Nothing left to undo!")
 		
 		if (isClockedIn()) {
 			_entries.removeLast()
