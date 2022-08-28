@@ -70,6 +70,8 @@ class TimeEntries(
 	
 	fun isClockedIn(): Boolean = _entries.isNotEmpty() && _entries.last().endTime == null
 	fun isClockedOut(): Boolean = !isClockedIn()
+	fun lastStartTime(): LocalTime? = _entries.lastOrNull()?.startTime
+	fun lastEndTime(): LocalTime? = _entries.lastOrNull()?.endTime
 	
 	/**
 	 * @precondition Cannot be clocked in

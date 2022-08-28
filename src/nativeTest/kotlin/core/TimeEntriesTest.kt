@@ -10,6 +10,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 class TimeEntriesTest {
@@ -170,6 +172,18 @@ class TimeEntriesTest {
 		assertFailsWith<IllegalStateException> {
 			twoEntriesIn!!.clockOut(time1)
 		}
+	}
+	
+	@Test fun testLastStartTime() {
+		assertNull(emptyEntries!!.lastStartTime())
+		assertSame(oneEntryIn!!.lastStartTime(), oneEntryIn!!.entries[0].startTime)
+		assertSame(twoEntriesOut!!.lastStartTime(), twoEntriesOut!!.entries[1].startTime)
+	}
+	
+	@Test fun testLastEndTime() {
+		assertNull(emptyEntries!!.lastEndTime())
+		assertNull(oneEntryIn!!.lastEndTime())
+		assertSame(twoEntriesOut!!.lastEndTime(), twoEntriesOut!!.entries[1].endTime)
 	}
 	
 	@Test fun testUndo() {
