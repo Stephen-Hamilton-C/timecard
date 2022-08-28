@@ -13,23 +13,23 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class TimeEntriesTest {
-	val timecardFile = localVfs(AppDirs.dataUserDir("timecard", "Stephen-Hamilton-C"))["timecard_${Util.TODAY}.json"]
-	val origTimecardFile = localVfs(AppDirs.dataUserDir("timecard", "Stephen-Hamilton-C"))["timecard_${Util.TODAY}.json.orig"]
-	val time1 = LocalTime(6, 12)
-	val time2 = LocalTime(8, 36)
-	val time3 = LocalTime(17, 31)
-	val time4 = LocalTime(17, 32)
-	val emptyEntriesData = "{}"
-	val oneEntryInData = "{\"entries\":[{\"startTime\":\"06:12\"}]}"
-	val oneEntryOutData = "{\"entries\":[{\"startTime\":\"06:12\",\"endTime\":\"08:36\"}]}"
-	val twoEntriesInData = "{\"entries\":[{\"startTime\":\"06:12\",\"endTime\":\"08:36\"},{\"startTime\":\"17:31\"}]}"
-	val twoEntriesOutData = "{\"entries\":[{\"startTime\":\"06:12\",\"endTime\":\"08:36\"},{\"startTime\":\"17:31\",\"endTime\":\"17:32\"}]}"
+	private val timecardFile = localVfs(AppDirs.dataUserDir("timecard", "Stephen-Hamilton-C"))["timecard_${Util.TODAY}.json"]
+	private val origTimecardFile = localVfs(AppDirs.dataUserDir("timecard", "Stephen-Hamilton-C"))["timecard_${Util.TODAY}.json.orig"]
+	private val time1 = LocalTime(6, 12)
+	private val time2 = LocalTime(8, 36)
+	private val time3 = LocalTime(17, 31)
+	private val time4 = LocalTime(17, 32)
+	private val emptyEntriesData = "{}"
+	private val oneEntryInData = "{\"entries\":[{\"startTime\":\"06:12\"}]}"
+	private val oneEntryOutData = "{\"entries\":[{\"startTime\":\"06:12\",\"endTime\":\"08:36\"}]}"
+	private val twoEntriesInData = "{\"entries\":[{\"startTime\":\"06:12\",\"endTime\":\"08:36\"},{\"startTime\":\"17:31\"}]}"
+	private val twoEntriesOutData = "{\"entries\":[{\"startTime\":\"06:12\",\"endTime\":\"08:36\"},{\"startTime\":\"17:31\",\"endTime\":\"17:32\"}]}"
 	
-	var emptyEntries: TimeEntries? = null
-	var oneEntryIn: TimeEntries? = null
-	var oneEntryOut: TimeEntries? = null
-	var twoEntriesIn: TimeEntries? = null
-	var twoEntriesOut: TimeEntries? = null
+	private var emptyEntries: TimeEntries? = null
+	private var oneEntryIn: TimeEntries? = null
+	private var oneEntryOut: TimeEntries? = null
+	private var twoEntriesIn: TimeEntries? = null
+	private var twoEntriesOut: TimeEntries? = null
 	
 	@BeforeTest fun setup() {
 		runBlocking {
@@ -59,7 +59,7 @@ class TimeEntriesTest {
 		}
 	}
 	
-	@Test fun failsOnBadConstruction() {
+	@Test fun testFailOnBadConstruction() {
 		assertFailsWith<IllegalStateException> {
 			TimeEntries(mutableListOf(
 				TimeEntry(time1),
@@ -94,6 +94,20 @@ class TimeEntriesTest {
 		}
 	}
 	
+	@Test fun testFailOnBadEntries() {
+		// Test overlapping entries
+		twoEntriesIn!!.entries[1].endTime = time1
+		assertFailsWith<IllegalStateException> {
+			twoEntriesIn!!.save()
+		}
+		
+		// Test null endTime in middle
+		twoEntriesOut!!.entries[0].endTime = null
+		assertFailsWith<IllegalStateException> {
+			twoEntriesOut!!.save()
+		}
+	}
+	
 	private suspend fun testLoadForTimeEntries(timeEntries: TimeEntries, timeEntriesData: String) {
 		timecardFile.writeString(timeEntriesData)
 		val loadedTimeEntries = TimeEntries.load()
@@ -124,11 +138,38 @@ class TimeEntriesTest {
 	}
 	
 	@Test fun testClockIn() {
-		TODO()
+		emptyEntries!!.clockIn(time2)
+		assertEquals(time2, emptyEntries!!.entries[0].startTime)
+		
+		assertFailsWith<IllegalStateException> {
+			oneEntryIn!!.clockIn(time2)
+		}
+		
+		oneEntryOut!!.clockIn(time3)
+		assertEquals(time3, oneEntryOut!!.entries[1].startTime)
+		
+		// Test trying to clock in too early
+		assertFailsWith<IllegalStateException> {
+			twoEntriesOut!!.clockIn(time1)
+		}
 	}
 	
 	@Test fun testClockOut() {
-		TODO()
+		assertFailsWith<IllegalStateException> {
+			emptyEntries!!.clockOut()
+		}
+		
+		oneEntryIn!!.clockOut(time2)
+		assertEquals(time2, oneEntryIn!!.entries[0].endTime!!)
+		
+		assertFailsWith<IllegalStateException> {
+			oneEntryOut!!.clockOut(time3)
+		}
+		
+		// Test trying to clock out too early
+		assertFailsWith<IllegalStateException> {
+			twoEntriesIn!!.clockOut(time1)
+		}
 	}
 	
 	@Test fun testUndo() {
