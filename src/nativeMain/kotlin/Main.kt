@@ -1,3 +1,4 @@
+import Color.yellow
 import command.CommandList
 import command.IAutoCommand
 import command.StatusCommand
@@ -11,7 +12,7 @@ fun main(args: Array<String>) {
         StatusCommand()
     }
     if (command == null) {
-        println("Unknown command. Use 'timecard help' for a list of commands.")
+        println(yellow("Unknown command. Use 'timecard help' for a list of commands."))
         return
     }
     command.execute(args.toList())

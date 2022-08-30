@@ -1,5 +1,6 @@
 package core
 
+import Color.yellow
 import com.soywiz.korio.file.VfsFile
 import com.soywiz.korio.file.fullName
 import kotlinx.serialization.decodeFromString
@@ -39,7 +40,7 @@ class ClassFileManager(val file: VfsFile) {
 			val parentDir = this.file.parent
 			val fileName = this.file.fullName
 			this.file.renameTo(parentDir["$fileName.old"].absolutePath)
-			println("Error while reading $fileName! It has been reset. Original file now has the .old postfix if you wish to manually recover the file.")
+			println(yellow("Error while reading $fileName! It has been reset. Original file now has the .old postfix if you wish to manually recover the file."))
 			defaultConstructor()
 		}
 	}

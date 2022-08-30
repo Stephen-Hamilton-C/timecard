@@ -1,5 +1,8 @@
 package command
 
+import Color.green
+import Color.red
+import Color.yellow
 import core.TimeEntries
 
 class StatusCommand : ICommand {
@@ -12,11 +15,11 @@ class StatusCommand : ICommand {
 	override fun execute(args: List<String>) {
 		val timeEntries = TimeEntries.load() // Leave this here so we can specify date later
 		if (timeEntries.entries.isEmpty()) {
-			println("You haven't clocked in yet today! Use 'timecard in' to clock in.") // Add different message for other dates
+			println(yellow("You haven't clocked in yet today! Use 'timecard in' to clock in.")) // Add different message for other dates
 		} else if (timeEntries.isClockedIn()) {
-			println("Clocked in since ${timeEntries.lastStartTime()}.")
+			println("Clocked ${green("in")} since ${green(timeEntries.lastStartTime())}.")
 		} else {
-			println("Clocked out since ${timeEntries.lastEndTime()}.")
+			println("Clocked ${red("out")} since ${red(timeEntries.lastEndTime())}.")
 		}
 	}
 }
