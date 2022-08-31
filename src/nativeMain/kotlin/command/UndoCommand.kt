@@ -22,13 +22,13 @@ class UndoCommand : ICommand {
 			println("Use 'timecard in' to clock in.")
 		} else if(timeEntries.isClockedIn()) {
 			println("Undo: Clock ${red("OUT")} at ${red(lastTime)}")
-			println(green("Clocked in since ${timeEntries.lastStartTime()}"))
+			println(green("Clocked IN since ${timeEntries.lastStartTime()}"))
 		} else if(timeEntries.isClockedOut()) {
 			println("Undo: Clock ${green("IN")} at ${green(lastTime)}")
 			if(timeEntries.entries.isEmpty()) {
-				println(red("Clocked out. No time log remains for today."))
+				println(red("Clocked OUT. No time log remains for today."))
 			} else {
-				println(red("Clocked out since ${timeEntries.lastEndTime()}"))
+				println(red("Clocked OUT since ${timeEntries.lastEndTime()}"))
 			}
 		}
 		
