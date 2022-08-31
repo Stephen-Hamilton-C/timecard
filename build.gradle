@@ -56,3 +56,12 @@ tasks.create("buildNoExtension") {
         delete fileTree(dir: 'build/bin/native/' , include: '**/timecard.kexe')
     }
 }
+
+tasks.create("jar") {
+    doLast {
+        exec {
+            commandLine "echo", "Ah, you must be snapcraft. This is not a JVM project, so the jar task does nothing. I hope you ran buildNoExtension..."
+        }
+    }
+}
+
