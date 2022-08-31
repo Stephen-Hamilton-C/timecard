@@ -21,10 +21,10 @@ class UndoCommand : ICommand {
 			println(yellow("No entries left to undo!"))
 			println("Use 'timecard in' to clock in.")
 		} else if(timeEntries.isClockedIn()) {
-			println("Undo: Clock ${red("out")} at $lastTime")
+			println("Undo: Clock ${red("OUT")} at ${red(lastTime)}")
 			println(green("Clocked in since ${timeEntries.lastStartTime()}"))
 		} else if(timeEntries.isClockedOut()) {
-			println("Undo: Clock ${green("in")} at $lastTime")
+			println("Undo: Clock ${green("IN")} at ${green(lastTime)}")
 			if(timeEntries.entries.isEmpty()) {
 				println(red("Clocked out. No time log remains for today."))
 			} else {
