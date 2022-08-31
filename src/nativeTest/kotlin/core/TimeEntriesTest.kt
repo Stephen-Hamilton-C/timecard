@@ -1,5 +1,8 @@
 package core
 
+import ClockedInException
+import ClockedOutException
+import InvalidTimeException
 import appdirs.AppDirs
 import com.soywiz.korio.file.std.localVfs
 import kotlinx.coroutines.runBlocking
@@ -143,7 +146,7 @@ class TimeEntriesTest {
 		emptyEntries!!.clockIn(time2)
 		assertEquals(time2, emptyEntries!!.entries[0].startTime)
 		
-		assertFailsWith<IllegalStateException> {
+		assertFailsWith<ClockedInException> {
 			oneEntryIn!!.clockIn(time2)
 		}
 		
@@ -151,25 +154,25 @@ class TimeEntriesTest {
 		assertEquals(time3, oneEntryOut!!.entries[1].startTime)
 		
 		// Test trying to clock in too early
-		assertFailsWith<IllegalStateException> {
+		assertFailsWith<InvalidTimeException> {
 			twoEntriesOut!!.clockIn(time1)
 		}
 	}
 	
 	@Test fun testClockOut() {
-		assertFailsWith<IllegalStateException> {
+		assertFailsWith<ClockedOutException> {
 			emptyEntries!!.clockOut()
 		}
 		
 		oneEntryIn!!.clockOut(time2)
 		assertEquals(time2, oneEntryIn!!.entries[0].endTime!!)
 		
-		assertFailsWith<IllegalStateException> {
+		assertFailsWith<ClockedOutException> {
 			oneEntryOut!!.clockOut(time3)
 		}
 		
 		// Test trying to clock out too early
-		assertFailsWith<IllegalStateException> {
+		assertFailsWith<InvalidTimeException> {
 			twoEntriesIn!!.clockOut(time1)
 		}
 	}
@@ -199,9 +202,7 @@ class TimeEntriesTest {
 		oneEntryIn!!.undo()
 		assertEquals(emptyEntries, oneEntryIn)
 		
-		assertFailsWith<IllegalStateException> {
-			emptyEntries!!.undo()
-		}
+		assertNull(emptyEntries!!.undo())
 	}
 	
 }
