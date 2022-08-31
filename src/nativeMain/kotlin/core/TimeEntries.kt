@@ -106,13 +106,15 @@ class TimeEntries(
 	 * @precondition Cannot be clocked in
 	 * @precondition Time cannot be before last clock out time
 	 * @throws ClockedInException If already clocked in when method is called.
-	 * @throws InvalidTimeException If the time provided is before the last clock out time.
+	 * @throws InvalidTimeException If the time provided is before the last clock out time or after the current time.
 	 */
 	fun clockIn(time: LocalTime = Util.NOW) {
 		if (isClockedIn()) throw ClockedInException()
 		// We are clocked in, so endTime must exist, otherwise this TimeEntries has lost sanity
 		if (_entries.isNotEmpty() && time < _entries.last().endTime!!)
-			throw InvalidTimeException()
+			throw InvalidTimeException(false)
+		if (time > Util.NOW)
+			throw InvalidTimeException(true)
 		
 		_entries.add(TimeEntry(time))
 	}
@@ -123,12 +125,14 @@ class TimeEntries(
 	 * @precondition Cannot be clocked out
 	 * @precondition Time cannot be before last clock in time
 	 * @throws ClockedOutException If already clocked out when method is called.
-	 * @throws InvalidTimeException If the time provided is before the last clock in time.
+	 * @throws InvalidTimeException If the time provided is before the last clock in time or after the current time.
 	 */
 	fun clockOut(time: LocalTime = Util.NOW) {
 		if(isClockedOut()) throw ClockedOutException()
 		if (time < _entries.last().startTime)
-			throw InvalidTimeException()
+			throw InvalidTimeException(false)
+		if (time > Util.NOW)
+			throw InvalidTimeException(true)
 		
 		_entries.last().endTime = time
 	}
