@@ -37,16 +37,16 @@ abstract class ClockCommand : ICommand {
 			var hour: Int = splitTime[0].toInt()
 			val minute: Int = if (splitTime[1].endsWith("AM") || splitTime[1].endsWith("PM")) {
 				val hour12Indicator = splitTime[1].substring(splitTime[1].lastIndex - 1)
-				if (hour < 12 && hour12Indicator == "PM") {
+				if (hour < 12 && hour12Indicator.endsWith("PM")) {
 					hour += 12
-				} else if(hour == 12 && hour12Indicator == "AM") {
+				} else if(hour == 12 && hour12Indicator.endsWith("AM")) {
 					hour = 0
 				}
 				// If user provides AM/PM mixed with 24-hour time,
 				// 12-hour will be ignored and will parse as 24-hour
 				// e.g. 17:31 PM should parse to LocalTime(17, 31)
 				
-				splitTime[1].substring(0, splitTime[1].lastIndex - 2).toInt()
+				splitTime[1].substring(0..1).toInt()
 			} else {
 				splitTime[1].toInt()
 			}
