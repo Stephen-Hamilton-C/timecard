@@ -2,6 +2,7 @@ import Color.yellow
 import command.CommandList
 import command.IAutoCommand
 import command.StatusCommand
+import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
     // Default to STATUS if no command is given
@@ -16,7 +17,7 @@ fun main(args: Array<String>) {
     // No command found
     if (command == null) {
         println(yellow("Unknown command. Use 'timecard help' for a list of commands."))
-        return
+        exitProcess(1)
     }
     
     command.execute(args.toList())
