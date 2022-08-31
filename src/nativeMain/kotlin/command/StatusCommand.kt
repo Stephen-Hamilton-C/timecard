@@ -17,9 +17,9 @@ class StatusCommand : ICommand {
 		if (timeEntries.entries.isEmpty()) {
 			println(yellow("You haven't clocked in yet today! Use 'timecard in' to clock in.")) // Add different message for other dates
 		} else if (timeEntries.isClockedIn()) {
-			println("Clocked ${green("in")} since ${green(timeEntries.lastStartTime())}.")
+			println("Clocked ${green("IN")} since ${green(timeEntries.lastStartTime())}.")
 		} else {
-			println("Clocked ${red("out")} since ${red(timeEntries.lastEndTime())}.")
+			println("Clocked ${red("OUT")} since ${red(timeEntries.lastEndTime())}.")
 		}
 	}
 }
