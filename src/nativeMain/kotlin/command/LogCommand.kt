@@ -6,6 +6,8 @@ import core.TimeEntries
 
 class LogCommand : ICommand {
 	override val name = "LOG"
+	override val args: List<String>
+		get() = TODO("Not yet implemented")
 	override val description: String
 		get() = TODO("Not yet implemented")
 	override val shortDescription: String
@@ -19,6 +21,7 @@ class LogCommand : ICommand {
 			return
 		}
 		
+		// Print out every entry
 		for(entry in timeEntries.entries) {
 			println("Clocked ${green("IN")} at ${green(entry.startTime)}")
 			if(entry.endTime != null) {

@@ -10,7 +10,8 @@ import kotlin.system.exitProcess
 
 abstract class ClockCommand : ICommand {
 	
-	abstract val invalidTimeMessage: String
+	override val args: List<String>
+		get() = TODO("Not yet implemented")
 	
 	private fun unknownArgError(): Nothing {
 		println(yellow("Unknown argument. Must be an integer or a specified time."))

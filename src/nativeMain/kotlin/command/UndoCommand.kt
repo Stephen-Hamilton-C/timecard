@@ -7,6 +7,8 @@ import core.TimeEntries
 
 class UndoCommand : ICommand {
 	override val name = "UNDO"
+	override val args: List<String>
+		get() = TODO("Not yet implemented")
 	override val description: String
 		get() = TODO("Not yet implemented")
 	override val shortDescription: String
@@ -30,6 +32,9 @@ class UndoCommand : ICommand {
 			}
 		}
 		
-		timeEntries.save()
+		// Don't waste time saving if nothing changed.
+		if (lastTime != null) {
+			timeEntries.save()
+		}
 	}
 }
