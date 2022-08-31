@@ -26,13 +26,6 @@ kotlin {
             }
         }
     }
-    linuxX64 {
-        binaries {
-            executable {
-                // TODO: Find a way to remove the .kexe extension
-            }
-        }
-    }
     sourceSets {
         commonMain {
             dependencies {
@@ -47,5 +40,19 @@ kotlin {
         nativeTest {
 
         }
+    }
+}
+
+tasks.create("buildNoExtension") {
+    group "build"
+    dependsOn "build"
+    doLast {
+        copy {
+            from layout.buildDirectory.dir("bin/native/")
+            into layout.buildDirectory.dir("bin/native/")
+            rename "timecard.kexe", "timecard"
+            duplicatesStrategy DuplicatesStrategy.INCLUDE
+        }
+        delete fileTree(dir: 'build/bin/native/' , include: '**/timecard.kexe')
     }
 }
