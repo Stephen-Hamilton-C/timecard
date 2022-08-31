@@ -14,7 +14,7 @@ class ClockOutCommand : ClockCommand() {
 	override val shortDescription: String
 		get() = TODO("Not yet implemented")
 	
-	override val invalidTimeMessage = "Time provided is before last clock in time! Use 'timecard log' to see when last clock in was."
+	override val invalidPastTimeMessage = "Time provided is before last clock in time! Use 'timecard log' to see when last clock in was."
 	
 	override fun clockExecute(timeEntries: TimeEntries, time: LocalTime) {
 		try {

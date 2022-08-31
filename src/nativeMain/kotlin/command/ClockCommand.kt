@@ -13,13 +13,24 @@ abstract class ClockCommand : ICommand {
 	override val args: List<String>
 		get() = TODO("Not yet implemented")
 	
+	/**
+	 * The message to display when the user tries to input a time before the last entry.
+	 */
+	abstract val invalidPastTimeMessage: String
+	
+	/**
+	 * Displays a message to the user that arguments are wrong and exits with code 1
+	 */
 	private fun unknownArgError(): Nothing {
 		println(yellow("Unknown argument. Must be an integer or a specified time."))
 		exitProcess(1)
 	}
 	
-	private fun parseTimeString(timeString: String): LocalTime {
-		val splitTime = timeString.split(':')
+	/**
+	 * Converts user inputted time into a LocalTime.
+	 */
+	fun parseTimeString(timeInput: String): LocalTime {
+		val splitTime = timeInput.uppercase().split(':')
 		if(splitTime.size != 2) unknownArgError()
 		
 		try {
@@ -31,6 +42,9 @@ abstract class ClockCommand : ICommand {
 				} else if(hour == 12 && hour12Indicator == "AM") {
 					hour = 0
 				}
+				// If user provides AM/PM mixed with 24-hour time,
+				// 12-hour will be ignored and will parse as 24-hour
+				// e.g. 17:31 PM should parse to LocalTime(17, 31)
 				
 				splitTime[1].substring(0, splitTime[1].lastIndex - 2).toInt()
 			} else {
@@ -42,6 +56,9 @@ abstract class ClockCommand : ICommand {
 		}
 	}
 	
+	/**
+	 * Gets a LocalTime object from the command arguments
+	 */
 	private fun getTime(args: List<String>): LocalTime {
 		val arg: String? = if(args.size >= 3) {
 			"${args[1]} ${args[2]}"
@@ -62,6 +79,9 @@ abstract class ClockCommand : ICommand {
 		}
 	}
 	
+	/**
+	 * Performs actions specific to clocking in or out.
+	 */
 	abstract fun clockExecute(timeEntries: TimeEntries, time: LocalTime)
 	
 	override fun execute(args: List<String>) {
@@ -73,7 +93,7 @@ abstract class ClockCommand : ICommand {
 			val eMessage = if(ite.afterNow) {
 				"Given time is after the current time! Choose a time before now or don't specify a time for the current time."
 			} else {
-				invalidTimeMessage
+				invalidPastTimeMessage
 			}
 			println(yellow(eMessage))
 			exitProcess(1)
