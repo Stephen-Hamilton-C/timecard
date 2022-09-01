@@ -36,4 +36,7 @@ parts:
     #  - default-jre-headless
     #build-packages:
     #  - python3
+    build-environment:
+      - XDG_CONFIG_HOME: "./project/config"
+      - XDG_DATA_HOME: "./project/data"
 confinement: strict
