@@ -1,9 +1,7 @@
 package command
 
 object CommandList {
-	val commands: List<ICommand>
-		get() = _commands
-	private val _commands = listOf<ICommand>(
+	val commands: List<ICommand> = listOf (
 		HelpCommand(),
 		StatusCommand(),
 		ClockInCommand(),
