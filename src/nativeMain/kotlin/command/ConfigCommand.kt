@@ -21,13 +21,12 @@ class ConfigCommand : ICommand {
 	private fun listConfigs() {
 		println("Config name - Possible values:")
 		ConfigList.configs.forEach {
-			println("  ${listConfig(it)}")
+			println("  ${formatConfig(it)}")
 		}
 	}
 	
-	private fun listConfig(config: IConfig) {
-		println("${magenta(config.name)} - $MAGENTA${config.possibleValues.joinToString("$RESET, $MAGENTA")}$RESET")
-	}
+	private fun formatConfig(config: IConfig): String =
+		"${magenta(config.name)} - $MAGENTA${config.possibleValues.joinToString("$RESET, $MAGENTA")}$RESET"
 	
 	override fun execute(args: List<String>) {
 		if(args.size < 2) {
@@ -48,12 +47,13 @@ class ConfigCommand : ICommand {
 			val inputValue = args.getOrNull(2)
 			if(inputValue == null) {
 				// No value given, show current value and list possible values
-				println("${magenta(foundConfig.name)} is currently set to ${magenta(foundConfig.value)}")
-				listConfig(foundConfig)
+				println("${magenta(foundConfig.name)} is currently set to ${magenta(foundConfig.retrieveValue())}")
+				println("  ${formatConfig(foundConfig)}")
 			} else {
 				try {
 					// Set value. IConfig should automatically parse the input string to a config value
-					foundConfig.value = inputValue
+					foundConfig.setValue(inputValue)
+					println("Set ${magenta(foundConfig.name)} to ${magenta(inputValue.uppercase())}")
 				} catch (_: BadConfigValueException) {
 					// User gave bad value, show them possible values
 					println(yellow("Unknown value for ${magenta(foundConfig.name)}.\n" +
