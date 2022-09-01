@@ -1,3 +1,4 @@
-class InvalidTimeException(val afterNow: Boolean) : Exception() {}
-class ClockedInException : Exception() {}
-class ClockedOutException : Exception() {}
+class BadConfigValueException : IllegalArgumentException() {}
+class InvalidTimeException(val afterNow: Boolean) : IllegalArgumentException() {}
+class ClockedInException : IllegalStateException() {}
+class ClockedOutException : IllegalStateException() {}

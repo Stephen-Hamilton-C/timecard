@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Configuration(
-    var test: Int = 0,
+    var color: ColorOptions = ColorOptions.from(Platform.osFamily != OsFamily.WINDOWS)
 ) {
     companion object {
         private val _configDir = AppDirs.configUserDir("timecard", "Stephen-Hamilton-C")
