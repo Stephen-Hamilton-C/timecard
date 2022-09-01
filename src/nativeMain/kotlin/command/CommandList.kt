@@ -8,6 +8,7 @@ object CommandList {
 		ClockOutCommand(),
 		LogCommand(),
 		UndoCommand(),
+		ConfigCommand(),
 		CleanCommand(),
 	)
 }
