@@ -18,3 +18,4 @@ gradle-app.setting
 
 # Non-portable Symbolic Link to built executable
 timecard.kexe
+timecard
