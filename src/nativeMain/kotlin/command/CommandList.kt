@@ -10,5 +10,6 @@ object CommandList {
 		ClockOutCommand(),
 		LogCommand(),
 		UndoCommand(),
+		CleanCommand(),
 	)
 }

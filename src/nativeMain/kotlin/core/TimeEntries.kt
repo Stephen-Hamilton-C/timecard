@@ -36,14 +36,14 @@ class TimeEntries(
 		/**
 		 * The directory where all timecard files are stored
 		 */
-		private val _dataDir = AppDirs.dataUserDir("timecard", "Stephen-Hamilton-C")
+		val dataDir = AppDirs.dataUserDir("timecard", "Stephen-Hamilton-C")
 		
 		/**
 		 * Creates a TimeEntries from a timecard file found for the date provided.
 		 * If no date is provided, will default to today's timecard.
 		 */
 		fun load(date: LocalDate = Util.TODAY) = runBlocking {
-			val manager = ClassFileManager(localVfs(_dataDir)["timecard_$date.json"])
+			val manager = ClassFileManager(localVfs(dataDir)["timecard_$date.json"])
 			return@runBlocking manager.load(::TimeEntries)
 		}
 	}
@@ -54,7 +54,7 @@ class TimeEntries(
 	 */
 	fun save(date: LocalDate = Util.TODAY) = runBlocking {
 		sanityCheck()
-		val manager = ClassFileManager(localVfs(_dataDir)["timecard_$date.json"])
+		val manager = ClassFileManager(localVfs(dataDir)["timecard_$date.json"])
 		manager.save(this@TimeEntries)
 	}
 	
