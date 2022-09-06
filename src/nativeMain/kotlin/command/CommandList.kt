@@ -10,5 +10,6 @@ object CommandList {
 		UndoCommand(),
 		ConfigCommand(),
 		CleanCommand(),
+		FilesCommand(),
 	)
 }
