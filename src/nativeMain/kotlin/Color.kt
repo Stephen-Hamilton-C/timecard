@@ -1,7 +1,9 @@
+import config.Configuration
+
 @Suppress("unused")
 object Color {
 
-	private val colorEnabled = true;
+	private val colorEnabled = Configuration.load().color.value
 
 	// Color code strings from
 	// http://www.topmudsites.com/forums/mud-coding/413-java-ansi.html
@@ -24,6 +26,6 @@ object Color {
 	fun cyan(string: Any?) = colorize(CYAN, string)
 	fun white(string: Any?) = colorize(WHITE, string)
 
-	fun colorize(color: String, string: Any?) = "$color${string.toString()}$RESET"
+	private fun colorize(color: String, string: Any?) = "$color${string.toString()}$RESET"
 
 }
