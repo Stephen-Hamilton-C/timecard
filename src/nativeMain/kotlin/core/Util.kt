@@ -1,5 +1,6 @@
 package core
 
+import com.soywiz.korio.file.VfsFile
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
@@ -43,4 +44,11 @@ object Util {
 	 * The current date, minus the given number of days
 	 */
 	fun todayMinus(days: Int): LocalDate = TODAY.minus(days, DateTimeUnit.DAY)
+	
+	suspend fun mkdirRecursive(directory: VfsFile) {
+		if(directory.exists()) return
+		if(!directory.parent.exists()) mkdirRecursive(directory.parent)
+		
+		directory.mkdir()
+	}
 }

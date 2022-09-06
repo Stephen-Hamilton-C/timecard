@@ -19,7 +19,8 @@ class ClassFileManager(val file: VfsFile) {
 	 */
 	suspend inline fun <reified T> save(obj: T) {
 		// Create parent directories, then serialize to Json and save to file.
-		file.ensureParents()
+		// VfsFile.ensureParents() is a thing that exists, but it seems to not work across different OSes...
+		Util.mkdirRecursive(file.parent)
 		file.writeString(Json.encodeToString(obj))
 	}
 	
