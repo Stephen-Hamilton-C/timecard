@@ -1,8 +1,8 @@
 package core
 
-import Color.yellow
 import com.soywiz.korio.file.VfsFile
 import com.soywiz.korio.file.fullName
+import core.Color.yellow
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

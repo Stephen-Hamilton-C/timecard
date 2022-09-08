@@ -1,8 +1,8 @@
 package command
 
 import ClockedInException
-import Color.green
-import Color.yellow
+import core.Color.green
+import core.Color.yellow
 import core.TimeEntries
 import kotlinx.datetime.LocalTime
 import kotlin.system.exitProcess

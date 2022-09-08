@@ -1,10 +1,10 @@
 package command
 
 import BadConfigValueException
-import Color.MAGENTA
-import Color.RESET
-import Color.magenta
-import Color.yellow
+import core.Color.MAGENTA
+import core.Color.RESET
+import core.Color.magenta
+import core.Color.yellow
 import config.ConfigList
 import config.IConfig
 import kotlin.system.exitProcess

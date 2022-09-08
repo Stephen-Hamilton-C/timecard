@@ -1,8 +1,8 @@
 package command
 
-import Color.green
-import Color.red
-import Color.yellow
+import core.Color.green
+import core.Color.red
+import core.Color.yellow
 import core.TimeEntries
 
 class StatusCommand : ICommand {

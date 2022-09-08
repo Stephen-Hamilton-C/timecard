@@ -1,4 +1,4 @@
-import Color.yellow
+import core.Color.yellow
 import command.CommandList
 import command.IAutoCommand
 import command.StatusCommand

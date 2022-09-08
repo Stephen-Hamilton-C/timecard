@@ -1,6 +1,6 @@
 package command
 
-import Color.cyan
+import core.Color.cyan
 import com.soywiz.korio.file.VfsFile
 import com.soywiz.korio.file.baseName
 import com.soywiz.korio.file.std.localVfs

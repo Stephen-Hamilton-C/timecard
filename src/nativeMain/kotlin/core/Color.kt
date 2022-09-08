@@ -1,3 +1,5 @@
+package core
+
 import config.Configuration
 
 @Suppress("unused")
@@ -5,7 +7,7 @@ object Color {
 
 	private val colorEnabled = Configuration.load().color.value
 
-	// Color code strings from
+	// core.Color code strings from
 	// http://www.topmudsites.com/forums/mud-coding/413-java-ansi.html
 	val BLACK: String = if(colorEnabled) { "\u001B[30m" } else { "" }
 	val RED: String = if(colorEnabled) { "\u001B[31m" } else { "" }

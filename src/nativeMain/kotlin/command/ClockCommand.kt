@@ -1,6 +1,6 @@
 package command
 
-import Color.yellow
+import core.Color.yellow
 import InvalidTimeException
 import core.TimeEntries
 import core.Util

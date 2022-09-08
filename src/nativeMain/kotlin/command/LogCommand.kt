@@ -1,7 +1,7 @@
 package command
 
-import Color.green
-import Color.red
+import core.Color.green
+import core.Color.red
 import core.TimeEntries
 
 class LogCommand : ICommand {

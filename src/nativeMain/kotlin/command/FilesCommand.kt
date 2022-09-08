@@ -1,7 +1,7 @@
 package command
 
-import Color.cyan
 import config.Configuration
+import core.Color.cyan
 import core.TimeEntries
 
 class FilesCommand : ICommand {
