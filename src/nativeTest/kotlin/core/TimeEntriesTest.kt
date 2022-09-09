@@ -5,9 +5,7 @@ import ClockedOutException
 import InvalidTimeException
 import appdirs.AppDirs
 import com.soywiz.korio.file.std.localVfs
-import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.LocalTime
-import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -37,9 +35,9 @@ class TimeEntriesTest {
 	private var twoEntriesOut: TimeEntries? = null
 	
 	@BeforeTest fun setup() {
-		runBlocking {
-			timecardFile.renameTo(origTimecardFile.absolutePath)
-		}
+//		runBlocking {
+//			timecardFile.renameTo(origTimecardFile.absolutePath)
+//		}
 		
 		emptyEntries = TimeEntries()
 		oneEntryIn = TimeEntries(mutableListOf(
@@ -58,11 +56,11 @@ class TimeEntriesTest {
 		))
 	}
 	
-	@AfterTest fun cleanup() {
-		runBlocking {
-			origTimecardFile.renameTo(timecardFile.absolutePath)
-		}
-	}
+//	@AfterTest fun cleanup() {
+//		runBlocking {
+//			origTimecardFile.renameTo(timecardFile.absolutePath)
+//		}
+//	}
 	
 	@Test fun testFailOnBadConstruction() {
 		assertFailsWith<IllegalStateException> {
@@ -205,6 +203,22 @@ class TimeEntriesTest {
 		assertEquals(emptyEntries, oneEntryIn)
 		
 		assertNull(emptyEntries!!.undo())
+	}
+	
+	@Test fun testCalculateWorkedTime() {
+		assertEquals(emptyEntries!!.calculateWorkedTime(), LocalTime(0, 0))
+		assertEquals(oneEntryOut!!.calculateWorkedTime(), LocalTime(2, 24))
+		assertEquals(twoEntriesOut!!.calculateWorkedTime(), LocalTime(2, 25))
+		
+		// TODO: Need to test clocked in entries
+	}
+	
+	@Test fun testCalculateBreakTime() {
+		assertEquals(emptyEntries!!.calculateBreakTime(), LocalTime(0, 0))
+		assertEquals(oneEntryIn!!.calculateBreakTime(), LocalTime(0, 0))
+		assertEquals(twoEntriesIn!!.calculateBreakTime(), LocalTime(8, 55))
+		
+		// TODO: Need to test clocked out entries
 	}
 	
 }

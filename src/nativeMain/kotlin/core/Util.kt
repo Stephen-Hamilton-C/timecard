@@ -52,15 +52,4 @@ object Util {
 		directory.mkdir()
 	}
 	
-	fun difference(earlierTime: LocalTime, laterTime: LocalTime): LocalTime {
-		var minute = laterTime.minute - earlierTime.minute
-		var hour = laterTime.hour - earlierTime.hour
-		
-		if(minute < 0) {
-			minute += 60
-			hour--
-		}
-		
-		return LocalTime(hour, minute)
-	}
 }

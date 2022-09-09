@@ -1,11 +1,13 @@
 package command
 
+import config.Configuration
+import config.TimeFormatOptions
 import core.Color.green
 import core.Color.red
 import core.Color.yellow
 import core.TimeEntries
-import core.Util
 import kotlinx.datetime.LocalTime
+import kotlin.math.roundToInt
 
 class StatusCommand : ICommand {
 	override val name: String = "STATUS"
@@ -16,45 +18,36 @@ class StatusCommand : ICommand {
 	override val shortDescription: String
 		get() = TODO("Not yet implemented")
 	
-	private fun calculateWorkedTime(timeEntries: TimeEntries): LocalTime {
-		var hourSum = 0
-		var minuteSum = 0
-		
-		for(entry in timeEntries.entries) {
-			val endTime = entry.endTime ?: Util.NOW
-			val diff = Util.difference(entry.startTime, endTime)
-			hourSum += diff.hour
-			minuteSum += diff.minute
-			if(minuteSum >= 60) {
-				minuteSum -= 60
-				hourSum += 1
-			}
+	private fun addS(number: Int): String {
+		return if(number == 1) {
+			""
+		} else {
+			"s"
 		}
-		
-		return LocalTime(hourSum, minuteSum)
 	}
 	
-	private fun calculateBreakTime(timeEntries: TimeEntries): LocalTime {
-		var hourSum = 0
-		var minuteSum = 0
-		
-		for((i, entry) in timeEntries.entries.withIndex()) {
-			if(entry.endTime == null) break
-			
-			val diff = if(i == timeEntries.entries.lastIndex && entry.endTime != null) {
-				Util.difference(entry.endTime!!, Util.NOW)
-			} else {
-				Util.difference(entry.endTime!!, timeEntries.entries[i + 1].startTime)
+	private fun formatTime(time: LocalTime?): String {
+		if(time == null) return ""
+		val config = Configuration.load()
+		return when(config.timeFormat) {
+			TimeFormatOptions.WRITTEN -> {
+				val hourS = addS(time.hour)
+				val minuteS = addS(time.minute)
+				"${time.hour} hour$hourS ${time.minute} minute$minuteS"
 			}
-			hourSum += diff.hour
-			minuteSum += diff.minute
-			if(minuteSum >= 60) {
-				minuteSum -= 60
-				hourSum += 1
+			TimeFormatOptions.WRITTEN_SHORT -> {
+				val hourS = addS(time.hour)
+				val minuteS = addS(time.minute)
+				"${time.hour} hr$hourS ${time.minute} min$minuteS"
+			}
+			TimeFormatOptions.ISO -> {
+				"${time.hour}:${time.minute}"
+			}
+			TimeFormatOptions.QUARTER_HOUR -> {
+				val quarterHour: Double = time.hour + ((time.minute / 15.0).roundToInt() * 15.0) / 60.0
+				"$quarterHour hours"
 			}
 		}
-		
-		return LocalTime(hourSum, minuteSum)
 	}
 	
 	override fun execute(args: List<String>) {
@@ -67,9 +60,7 @@ class StatusCommand : ICommand {
 		} else {
 			println("Clocked ${red("OUT")} since ${red(timeEntries.lastEndTime())}.")
 		}
-		// Print worked time
-		println("Worked for ${calculateWorkedTime(timeEntries)}")
-		// Print time on break
-		println("On break for ${calculateBreakTime(timeEntries)}")
+		println("Worked for ${formatTime(timeEntries.calculateWorkedTime())}")
+		println("On break for ${formatTime(timeEntries.calculateBreakTime())}")
 	}
 }

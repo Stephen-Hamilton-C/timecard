@@ -1,12 +1,12 @@
 package command
 
 import BadConfigValueException
+import config.ConfigList
+import config.IConfig
 import core.Color.MAGENTA
 import core.Color.RESET
 import core.Color.magenta
 import core.Color.yellow
-import config.ConfigList
-import config.IConfig
 import kotlin.system.exitProcess
 
 class ConfigCommand : ICommand {
@@ -26,7 +26,9 @@ class ConfigCommand : ICommand {
 	}
 	
 	private fun formatConfig(config: IConfig): String =
-		"${magenta(config.name)} - $MAGENTA${config.possibleValues.joinToString("$RESET, $MAGENTA")}$RESET"
+		"${magenta(config.name)} - $MAGENTA${config.possibleValues.joinToString("$RESET, $MAGENTA")}$RESET\n" +
+				"  ${config.description}"
+	
 	
 	override fun execute(args: List<String>) {
 		if(args.size < 2) {
@@ -49,6 +51,7 @@ class ConfigCommand : ICommand {
 				// No value given, show current value and list possible values
 				println("${magenta(foundConfig.name)} is currently set to ${magenta(foundConfig.retrieveValue())}")
 				println("  ${formatConfig(foundConfig)}")
+				println("  ${foundConfig.description}")
 			} else {
 				try {
 					// Set value. IConfig should automatically parse the input string to a config value

@@ -9,7 +9,8 @@ import kotlinx.serialization.Serializable
 // TODO: See about making this an Object
 @Serializable
 data class Configuration(
-	var color: ColorOptions = ColorOptions.from(Platform.osFamily != OsFamily.WINDOWS)
+	var color: ColorOptions = ColorOptions.from(Platform.osFamily != OsFamily.WINDOWS),
+	var timeFormat: TimeFormatOptions = TimeFormatOptions.WRITTEN,
 ) {
 	companion object {
 		val configDir = AppDirs.configUserDir("timecard", "Stephen-Hamilton-C")

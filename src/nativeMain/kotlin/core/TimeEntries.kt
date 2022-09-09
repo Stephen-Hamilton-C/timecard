@@ -83,6 +83,30 @@ class TimeEntries(
 		}
 	}
 	
+	private fun difference(earlierTime: LocalTime, laterTime: LocalTime): LocalTime {
+		var minute = laterTime.minute - earlierTime.minute
+		var hour = laterTime.hour - earlierTime.hour
+		
+		if(minute < 0) {
+			minute += 60
+			hour--
+		}
+		
+		return LocalTime(hour, minute)
+	}
+	
+	private fun add(time1: LocalTime, time2: LocalTime): LocalTime {
+		var hours = time1.hour + time2.hour
+		var minutes = time1.minute + time2.minute
+		
+		if(minutes >= 60) {
+			minutes -= 60
+			hours++
+		}
+		
+		return LocalTime(hours, minutes)
+	}
+	
 	override fun equals(other: Any?): Boolean {
 		if (other == null) return false
 		if (other is TimeEntries) {
@@ -154,6 +178,44 @@ class TimeEntries(
 		}
 		
 		return lastTime
+	}
+	
+	/**
+	 * Calculates the total time the user has been clocked in
+	 * @return A LocalTime with hours and minutes worked
+	 */
+	fun calculateWorkedTime(): LocalTime {
+		var sum = LocalTime(0, 0)
+		
+		for(entry in _entries) {
+			val endTime = entry.endTime ?: Util.NOW
+			val diff = difference(entry.startTime, endTime)
+			sum = add(sum, diff)
+		}
+		
+		return sum
+	}
+	
+	/**
+	 * Calculates the total time the user has been clocked out
+	 * @return A LocalTime with hours and minutes worked
+	 */
+	fun calculateBreakTime(): LocalTime {
+		var sum = LocalTime(0, 0)
+		
+		for((i, entry) in _entries.withIndex()) {
+			if(entry.endTime == null) break
+			
+			val nextTime = if(i == _entries.lastIndex && isClockedOut()) {
+				Util.NOW
+			} else {
+				_entries[i + 1].startTime
+			}
+			val diff = difference(entry.endTime!!, nextTime)
+			sum = add(sum, diff)
+		}
+		
+		return sum
 	}
 	
 }

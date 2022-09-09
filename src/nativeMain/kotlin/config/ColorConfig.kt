@@ -19,6 +19,7 @@ enum class ColorOptions(val value: Boolean) {
 
 class ColorConfig : IConfig {
 	override val name = "color"
+	override val description = "Determines if text should be colorful. Some terminals may not support this."
 	override val possibleValues: List<String> = ColorOptions.values().map { it.name.uppercase() }
 	override fun retrieveValue(): String = Configuration.load().color.toString()
 	override fun setValue(userInput: String) {
