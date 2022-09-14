@@ -21,11 +21,11 @@ class ConfigCommand : ICommand {
 	private fun listConfigs() {
 		println("Config name - Possible values:")
 		ConfigList.configs.forEach {
-			println("  ${formatConfig(it)}")
+			println("  ${configDetails(it)}")
 		}
 	}
 	
-	private fun formatConfig(config: IConfig): String =
+	private fun configDetails(config: IConfig): String =
 		"${magenta(config.name)}: $MAGENTA${config.possibleValues.joinToString("$RESET, $MAGENTA")}$RESET - " +
 				config.description
 	
@@ -50,7 +50,7 @@ class ConfigCommand : ICommand {
 			if(inputValue == null) {
 				// No value given, show current value and list possible values
 				println("${magenta(foundConfig.name)} is currently set to ${magenta(foundConfig.retrieveValue())}")
-				println("  ${formatConfig(foundConfig)}")
+				println("  ${configDetails(foundConfig)}")
 			} else {
 				try {
 					// Set value. IConfig should automatically parse the input string to a config value
