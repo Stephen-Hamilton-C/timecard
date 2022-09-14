@@ -7,12 +7,9 @@ import core.Util
 
 class LogCommand : ICommand {
 	override val name = "LOG"
-	override val args: List<String>
-		get() = TODO("Not yet implemented")
-	override val description: String
-		get() = TODO("Not yet implemented")
-	override val shortDescription: String
-		get() = TODO("Not yet implemented")
+	override val args: List<String> = listOf("[days]")
+	override val description: String = "Shows all clocked in and out entries for the day. Providing a days argument shows the log for that many days ago."
+	override val shortDescription: String = "Shows a log of entries for today. Providing days shows the log for that many days ago."
 	
 	override fun execute(args: List<String>) {
 		// TODO: Take in one argument to load a Timecard from NUM days ago

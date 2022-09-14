@@ -11,12 +11,12 @@ import kotlin.system.exitProcess
 
 class ConfigCommand : ICommand {
 	override val name = "CONFIG"
-	override val args: List<String>
-		get() = TODO("Not yet implemented")
-	override val description: String
-		get() = TODO("Not yet implemented")
-	override val shortDescription: String
-		get() = TODO("Not yet implemented")
+	override val args: List<String> = listOf("[config]", "[value]")
+	override val description: String = "Lists, reports on, or manipulates a config value depending on the arguments provided. " +
+			"No args will list all configs and their values. " +
+			"Providing no value argument will simply show what the config is currently set to along with its possible values. " +
+			"Providing all arguments will set the config to the value provided."
+	override val shortDescription: String = "Lists, reports on, or manipulates a config value depending on the arguments provided."
 	
 	private fun listConfigs() {
 		println("Config name - Possible values:")

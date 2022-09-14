@@ -8,12 +8,9 @@ import core.Util
 
 class UndoCommand : ICommand {
 	override val name = "UNDO"
-	override val args: List<String>
-		get() = TODO("Not yet implemented")
-	override val description: String
-		get() = TODO("Not yet implemented")
-	override val shortDescription: String
-		get() = TODO("Not yet implemented")
+	override val args: List<String> = listOf()
+	override val description: String = "Removes the last entry made"
+	override val shortDescription: String = description
 	
 	override fun execute(args: List<String>) {
 		val timeEntries = TimeEntries.load()

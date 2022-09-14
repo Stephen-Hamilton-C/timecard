@@ -10,10 +10,8 @@ import kotlin.system.exitProcess
 
 class ClockOutCommand : ClockCommand() {
 	override val name = "OUT"
-	override val description: String
-		get() = TODO("Not yet implemented")
-	override val shortDescription: String
-		get() = TODO("Not yet implemented")
+	override val description: String = "Clocks you out. An offset can be provided in minutes, or at a specific time. (e.g. 'timecard out 15' will clock out 15 minutes ago, and 'timecard out 5:31 PM' will clock you out at 5:31 PM. 24-hour time is supported as well.)"
+	override val shortDescription: String = "Clocks you out. An offset can be provided in minutes, or at a specific time."
 	
 	override val invalidPastTimeMessage = "Time provided is before last clock in time! Use 'timecard log' to see when last clock in was."
 	

@@ -5,6 +5,7 @@ import com.soywiz.korio.file.baseName
 import com.soywiz.korio.file.std.localVfs
 import config.Configuration
 import core.Color.cyan
+import core.Color.magenta
 import core.TimeEntries
 import core.Util
 import kotlinx.coroutines.runBlocking
@@ -13,12 +14,9 @@ import kotlinx.datetime.LocalDate
 class CleanCommand : IAutoCommand {
 	
 	override val name: String = "CLEAN"
-	override val args: List<String>
-		get() = TODO("Not yet implemented")
-	override val description: String
-		get() = TODO("Not yet implemented")
-	override val shortDescription: String
-		get() = TODO("Not yet implemented")
+	override val args: List<String> = listOf()
+	override val description: String = "Removes old timecard files. This is done automatically unless ${magenta("clean_interval")} is set to ${magenta("MANUALLY")}."
+	override val shortDescription: String = "Removes old timecard files according to the ${magenta("clean_interval")} config."
 	
 	private fun clean(automatic: Boolean) = runBlocking {
 		val config = Configuration.load()

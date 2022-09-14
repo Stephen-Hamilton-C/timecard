@@ -3,6 +3,7 @@ package command
 import config.Configuration
 import config.TimeFormatOptions
 import core.Color.green
+import core.Color.magenta
 import core.Color.red
 import core.Color.yellow
 import core.TimeEntries
@@ -12,12 +13,9 @@ import kotlin.math.roundToInt
 
 class StatusCommand : ICommand {
 	override val name: String = "STATUS"
-	override val args: List<String>
-		get() = TODO("Not yet implemented")
-	override val description: String
-		get() = TODO("Not yet implemented")
-	override val shortDescription: String
-		get() = TODO("Not yet implemented")
+	override val args: List<String> = listOf()
+	override val description: String = "Shows whether you are clocked in or out and how long you have worked and been on break. Use the ${magenta("time_format")} config to change how this is shown."
+	override val shortDescription: String = "Shows whether you are clocked in or out and how long you have worked and been on break."
 	
 	private fun addS(number: Int): String {
 		return if(number == 1) {

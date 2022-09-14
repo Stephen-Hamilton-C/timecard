@@ -4,12 +4,9 @@ import kotlin.system.exitProcess
 
 class HelpCommand : ICommand {
 	override val name = "HELP"
-	override val args: List<String>
-		get() = TODO("Not yet implemented")
-	override val description: String
-		get() = TODO("Not yet implemented")
-	override val shortDescription: String
-		get() = TODO("Not yet implemented")
+	override val args: List<String> = listOf("[command]")
+	override val description: String = "Shows help for all commands, or detailed help for a specific command if one is provided."
+	override val shortDescription: String = description
 	
 	/**
 	 * Formats the command's name and arguments for display to the user

@@ -1,7 +1,7 @@
 package command
 
-import core.Color.yellow
 import InvalidTimeException
+import core.Color.yellow
 import core.TimeEntries
 import core.Util
 import kotlinx.datetime.LocalTime
@@ -10,8 +10,7 @@ import kotlin.system.exitProcess
 
 abstract class ClockCommand : ICommand {
 	
-	override val args: List<String>
-		get() = TODO("Not yet implemented")
+	override val args: List<String> = listOf("[offset/time]")
 	
 	/**
 	 * The message to display when the user tries to input a time before the last entry.
