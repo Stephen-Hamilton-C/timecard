@@ -33,6 +33,7 @@ class ConfigCommand : ICommand {
 	override fun execute(args: List<String>) {
 		if(args.size < 2) {
 			// No config selected, list all possible configs
+			println("Usage: 'timecard config <config> [value]'")
 			listConfigs()
 		} else {
 			// User supplied config name, try to find it
