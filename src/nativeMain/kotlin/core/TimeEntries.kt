@@ -43,7 +43,7 @@ class TimeEntries(
 		 * If no date is provided, will default to today's timecard.
 		 */
 		fun load(date: LocalDate = Util.TODAY) = runBlocking {
-			val manager = ClassFileManager(localVfs(dataDir)["timecard_$date.json"])
+			val manager = ClassFileIO(localVfs(dataDir)["timecard_$date.json"])
 			return@runBlocking manager.load(::TimeEntries)
 		}
 	}
@@ -54,7 +54,7 @@ class TimeEntries(
 	 */
 	fun save(date: LocalDate = Util.TODAY) = runBlocking {
 		sanityCheck()
-		val manager = ClassFileManager(localVfs(dataDir)["timecard_$date.json"])
+		val manager = ClassFileIO(localVfs(dataDir)["timecard_$date.json"])
 		manager.save(this@TimeEntries)
 	}
 	

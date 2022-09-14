@@ -7,12 +7,11 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-// TODO: Need better name
 /**
  * Standardizes how classes get loaded and saved to files.
- * Create a new ClassFileManager with a VfsFile to where you expect the data for the class to be saved.
+ * Create a new ClassFileIO with a VfsFile to where you expect the data for the class to be saved.
  */
-class ClassFileManager(val file: VfsFile) {
+class ClassFileIO(val file: VfsFile) {
 	/**
 	 * Saves the object to the file specified in the constructor.
 	 * @param obj An object that is a Serializable class.
