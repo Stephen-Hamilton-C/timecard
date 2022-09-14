@@ -26,8 +26,8 @@ class ConfigCommand : ICommand {
 	}
 	
 	private fun formatConfig(config: IConfig): String =
-		"${magenta(config.name)} - $MAGENTA${config.possibleValues.joinToString("$RESET, $MAGENTA")}$RESET\n" +
-				"  ${config.description}"
+		"${magenta(config.name)}: $MAGENTA${config.possibleValues.joinToString("$RESET, $MAGENTA")}$RESET - " +
+				config.description
 	
 	
 	override fun execute(args: List<String>) {
@@ -51,7 +51,6 @@ class ConfigCommand : ICommand {
 				// No value given, show current value and list possible values
 				println("${magenta(foundConfig.name)} is currently set to ${magenta(foundConfig.retrieveValue())}")
 				println("  ${formatConfig(foundConfig)}")
-				println("  ${foundConfig.description}")
 			} else {
 				try {
 					// Set value. IConfig should automatically parse the input string to a config value
