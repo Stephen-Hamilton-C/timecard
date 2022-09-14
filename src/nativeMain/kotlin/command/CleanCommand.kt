@@ -1,9 +1,10 @@
 package command
 
-import core.Color.cyan
 import com.soywiz.korio.file.VfsFile
 import com.soywiz.korio.file.baseName
 import com.soywiz.korio.file.std.localVfs
+import config.Configuration
+import core.Color.cyan
 import core.TimeEntries
 import core.Util
 import kotlinx.coroutines.runBlocking
@@ -19,11 +20,16 @@ class CleanCommand : IAutoCommand {
 	override val shortDescription: String
 		get() = TODO("Not yet implemented")
 	
-	override fun execute(args: List<String>) {
-		autoExecute()
-	}
-	
-	override fun autoExecute() = runBlocking {
+	private fun clean(automatic: Boolean) = runBlocking {
+		val config = Configuration.load()
+		var days = config.cleanInterval.days
+		if(days == -1) {
+			if(automatic) {
+				return@runBlocking
+			} else {
+				days = 1
+			}
+		}
 		val dataDir = localVfs(TimeEntries.dataDir)
 		
 		// I know Korio has VfsFile.listSimple(), but it's broken as it doesn't retain path information
@@ -35,8 +41,7 @@ class CleanCommand : IAutoCommand {
 				try {
 					val date = LocalDate.parse(dateString)
 					
-					// TODO: Make config for this
-					if (date < Util.todayMinus(7)) {
+					if (date <= Util.todayMinus(days)) {
 						file.delete()
 						println(cyan("Removed old timecard file for $date"))
 					}
@@ -47,5 +52,8 @@ class CleanCommand : IAutoCommand {
 			}
 		}
 	}
+	
+	override fun execute(args: List<String>) = clean(false)
+	override fun autoExecute() = clean(true)
 	
 }

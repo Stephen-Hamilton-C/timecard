@@ -12,6 +12,7 @@ data class Configuration(
 	var color: BooleanOptions = BooleanOptions.from(Platform.osFamily != OsFamily.WINDOWS),
 	var hour24: BooleanOptions = BooleanOptions.FALSE,
 	var timeFormat: TimeFormatOptions = TimeFormatOptions.WRITTEN,
+	var cleanInterval: CleanIntervalOptions = CleanIntervalOptions.WEEKLY,
 ) {
 	companion object {
 		val configDir = AppDirs.configUserDir("timecard", "Stephen-Hamilton-C")
