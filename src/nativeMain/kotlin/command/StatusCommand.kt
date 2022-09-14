@@ -6,6 +6,7 @@ import core.Color.green
 import core.Color.red
 import core.Color.yellow
 import core.TimeEntries
+import core.Util
 import kotlinx.datetime.LocalTime
 import kotlin.math.roundToInt
 
@@ -56,9 +57,9 @@ class StatusCommand : ICommand {
 			println(yellow("You haven't clocked in yet today! Use 'timecard in' to clock in."))
 			return
 		} else if (timeEntries.isClockedIn()) {
-			println("Clocked ${green("IN")} since ${green(timeEntries.lastStartTime())}.")
+			println("Clocked ${green("IN")} since ${green(Util.formatHours(timeEntries.lastStartTime()))}.")
 		} else {
-			println("Clocked ${red("OUT")} since ${red(timeEntries.lastEndTime())}.")
+			println("Clocked ${red("OUT")} since ${red(Util.formatHours(timeEntries.lastEndTime()))}.")
 		}
 		println("Worked for ${formatTime(timeEntries.calculateWorkedTime())}")
 		println("On break for ${formatTime(timeEntries.calculateBreakTime())}")

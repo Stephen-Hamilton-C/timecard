@@ -3,6 +3,7 @@ package command
 import core.Color.green
 import core.Color.red
 import core.TimeEntries
+import core.Util
 
 class LogCommand : ICommand {
 	override val name = "LOG"
@@ -23,9 +24,9 @@ class LogCommand : ICommand {
 		
 		// Print out every entry
 		for(entry in timeEntries.entries) {
-			println("Clocked ${green("IN")} at ${green(entry.startTime)}")
+			println("Clocked ${green("IN")} at ${green(Util.formatHours(entry.startTime))}")
 			if(entry.endTime != null) {
-				println("Clocked ${red("OUT")} at ${red(entry.endTime)}")
+				println("Clocked ${red("OUT")} at ${red(Util.formatHours(entry.endTime))}")
 			}
 		}
 		println()

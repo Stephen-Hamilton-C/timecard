@@ -1,6 +1,7 @@
 package core
 
 import com.soywiz.korio.file.VfsFile
+import config.Configuration
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
@@ -19,6 +20,7 @@ object Util {
 	 */
 	private val untrimmedNow: LocalTime = Clock.System.now()
 		.toLocalDateTime(TimeZone.currentSystemDefault()).time
+	private val config = Configuration.load()
 	
 	/**
 	 * The current system time.
@@ -50,6 +52,20 @@ object Util {
 		if(!directory.parent.exists()) mkdirRecursive(directory.parent)
 		
 		directory.mkdir()
+	}
+	
+	fun formatHours(time: LocalTime?): String {
+		return if(time == null) {
+			""
+		} else if(config.hour24.value) {
+			time.toString()
+		} else if(time.hour > 12) {
+			"${time.hour - 12}:${time.minute} PM"
+		} else if(time.hour == 0) {
+			"12:${time.minute} AM"
+		} else {
+			"${time.toString()} AM"
+		}
 	}
 	
 }

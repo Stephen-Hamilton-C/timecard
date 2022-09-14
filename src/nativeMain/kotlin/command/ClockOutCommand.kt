@@ -4,6 +4,7 @@ import ClockedOutException
 import core.Color.red
 import core.Color.yellow
 import core.TimeEntries
+import core.Util
 import kotlinx.datetime.LocalTime
 import kotlin.system.exitProcess
 
@@ -19,7 +20,7 @@ class ClockOutCommand : ClockCommand() {
 	override fun clockExecute(timeEntries: TimeEntries, time: LocalTime) {
 		try {
 			timeEntries.clockOut(time)
-			println("Clocked ${red("OUT")} at ${red(time)}.")
+			println("Clocked ${red("OUT")} at ${red(Util.formatHours(time))}.")
 		} catch(cie: ClockedOutException) {
 			println(yellow("Already clocked out! Use 'timecard in' to clock in, or use 'timecard undo' to remove last clock out."))
 			exitProcess(1)
