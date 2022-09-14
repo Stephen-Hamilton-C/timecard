@@ -2,6 +2,7 @@ package command
 
 object CommandList {
 	val commands: List<ICommand> = listOf (
+		VersionCommand(),
 		HelpCommand(),
 		StatusCommand(),
 		ClockInCommand(),
@@ -11,5 +12,5 @@ object CommandList {
 		ConfigCommand(),
 		CleanCommand(),
 		FilesCommand(),
-	)
+	).sortedBy { it.name }
 }
