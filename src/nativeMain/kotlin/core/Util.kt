@@ -47,6 +47,9 @@ object Util {
 	 */
 	fun todayMinus(days: Int): LocalDate = TODAY.minus(days, DateTimeUnit.DAY)
 	
+	/**
+	 * Creates parent directories
+	 */
 	suspend fun mkdirRecursive(directory: VfsFile) {
 		if(directory.exists()) return
 		if(!directory.parent.exists()) mkdirRecursive(directory.parent)
@@ -54,6 +57,9 @@ object Util {
 		directory.mkdir()
 	}
 	
+	/**
+	 * Adds AM/PM formatting if 24_hour config is false
+	 */
 	fun formatHours(time: LocalTime?): String {
 		return if(time == null) {
 			""

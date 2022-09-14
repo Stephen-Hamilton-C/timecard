@@ -18,13 +18,18 @@ class ConfigCommand : ICommand {
 			"Providing all arguments will set the config to the value provided."
 	override val shortDescription: String = "Lists, reports on, or manipulates a config value depending on the arguments provided."
 	
+	/**
+	 * Lists all configurations with a description and possible values
+	 */
 	private fun listConfigs() {
-		println("Config name - Possible values:")
 		ConfigList.configs.forEach {
 			println("  ${configDetails(it)}")
 		}
 	}
 	
+	/**
+	 * Gets the details of a config
+	 */
 	private fun configDetails(config: IConfig): String =
 		"${magenta(config.name)}: $MAGENTA${config.possibleValues.joinToString("$RESET, $MAGENTA")}$RESET - " +
 				config.description
