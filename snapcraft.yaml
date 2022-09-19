@@ -27,5 +27,5 @@ parts:
     build-packages:
       - default-jre-headless
     build-environment:
-      - prefix: $SNAP
+      - prefix: $SNAP/bin
 confinement: strict
