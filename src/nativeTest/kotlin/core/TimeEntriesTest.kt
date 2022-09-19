@@ -18,15 +18,10 @@ import kotlin.test.assertTrue
 class TimeEntriesTest {
 	private val timecardFile = localVfs(AppDirs.dataUserDir("timecard", "Stephen-Hamilton-C"))["timecard_${Util.TODAY}.json"]
 	private val origTimecardFile = localVfs(AppDirs.dataUserDir("timecard", "Stephen-Hamilton-C"))["timecard_${Util.TODAY}.json.orig"]
-	private val time1 = LocalTime(6, 12)
-	private val time2 = LocalTime(8, 36)
-	private val time3 = LocalTime(17, 31)
-	private val time4 = LocalTime(17, 32)
-	private val emptyEntriesData = "{}"
-	private val oneEntryInData = "{\"entries\":[{\"startTime\":\"06:12\"}]}"
-	private val oneEntryOutData = "{\"entries\":[{\"startTime\":\"06:12\",\"endTime\":\"08:36\"}]}"
-	private val twoEntriesInData = "{\"entries\":[{\"startTime\":\"06:12\",\"endTime\":\"08:36\"},{\"startTime\":\"17:31\"}]}"
-	private val twoEntriesOutData = "{\"entries\":[{\"startTime\":\"06:12\",\"endTime\":\"08:36\"},{\"startTime\":\"17:31\",\"endTime\":\"17:32\"}]}"
+	private val time1 = Util.nowMinus(4)
+	private val time2 = Util.nowMinus(3)
+	private val time3 = Util.nowMinus(2)
+	private val time4 = Util.nowMinus(1)
 	
 	private var emptyEntries: TimeEntries? = null
 	private var oneEntryIn: TimeEntries? = null
@@ -143,8 +138,8 @@ class TimeEntriesTest {
 	}
 	
 	@Test fun testClockIn() {
-		emptyEntries!!.clockIn(time2)
-		assertEquals(time2, emptyEntries!!.entries[0].startTime)
+		emptyEntries!!.clockIn(time1)
+		assertEquals(time1, emptyEntries!!.entries[0].startTime)
 		
 		assertFailsWith<ClockedInException> {
 			oneEntryIn!!.clockIn(time2)
@@ -207,8 +202,8 @@ class TimeEntriesTest {
 	
 	@Test fun testCalculateWorkedTime() {
 		assertEquals(emptyEntries!!.calculateWorkedTime(), LocalTime(0, 0))
-		assertEquals(oneEntryOut!!.calculateWorkedTime(), LocalTime(2, 24))
-		assertEquals(twoEntriesOut!!.calculateWorkedTime(), LocalTime(2, 25))
+		assertEquals(oneEntryOut!!.calculateWorkedTime(), LocalTime(0, 1))
+		assertEquals(twoEntriesOut!!.calculateWorkedTime(), LocalTime(0, 2))
 		
 		// TODO: Need to test clocked in entries
 	}
@@ -216,7 +211,7 @@ class TimeEntriesTest {
 	@Test fun testCalculateBreakTime() {
 		assertEquals(emptyEntries!!.calculateBreakTime(), LocalTime(0, 0))
 		assertEquals(oneEntryIn!!.calculateBreakTime(), LocalTime(0, 0))
-		assertEquals(twoEntriesIn!!.calculateBreakTime(), LocalTime(8, 55))
+		assertEquals(twoEntriesIn!!.calculateBreakTime(), LocalTime(0, 1))
 		
 		// TODO: Need to test clocked out entries
 	}
