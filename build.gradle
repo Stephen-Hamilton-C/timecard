@@ -4,7 +4,6 @@ plugins {
 }
 
 group = 'app.shamilton'
-version = '0.1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -12,8 +11,8 @@ repositories {
 
 project.ext {
     versionFileLines = new File("src/nativeMain/kotlin/Version.kt").readLines()
-    versionLine = versionFileLines.get(1)
-    debianLine = versionFileLines.get(3)
+    versionLine = versionFileLines.get(4)
+    debianLine = versionFileLines.get(6)
 
     appVersion = versionLine.substring(1, versionLine.length()-1)
     debianVersion = debianLine.substring(1, debianLine.length()-1)
