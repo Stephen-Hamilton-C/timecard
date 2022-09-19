@@ -1,12 +1,12 @@
-all: buildNoExtension
+all: build
 
-buildNoExtension:
+build:
 	@echo "Building timecard..."
 	./gradlew linkReleaseExecutableNative
 
 clean:
 	@echo "Cleaning up..."
-	rm -rf build
+	rm -rf ./build
 
 install:
 	@echo "Installing timecard..."
