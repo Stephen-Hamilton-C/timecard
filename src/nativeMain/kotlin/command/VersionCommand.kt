@@ -1,5 +1,7 @@
 package command
 
+import VERSION
+
 class VersionCommand : ICommand {
 	override val name: String = "VERSION"
 	override val args: List<String> = listOf()
@@ -7,7 +9,6 @@ class VersionCommand : ICommand {
 	override val shortDescription: String = description
 	
 	override fun execute(args: List<String>) {
-		// TODO: This needs to be set in Gradle settings and somehow retrieved here
-		println("timecard version 0.1.0")
+		println("timecard version $VERSION")
 	}
 }

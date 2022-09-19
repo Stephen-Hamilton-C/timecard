@@ -10,6 +10,15 @@ repositories {
     mavenCentral()
 }
 
+project.ext {
+    versionFileLines = new File("src/nativeMain/kotlin/Version.kt").readLines()
+    versionLine = versionFileLines.get(1)
+    debianLine = versionFileLines.get(3)
+
+    appVersion = versionLine.substring(1, versionLine.length()-1)
+    debianVersion = debianLine.substring(1, debianLine.length()-1)
+}
+
 kotlin {
     def hostOs = System.getProperty("os.name")
     def isMingwX64 = hostOs.startsWith("Windows")
@@ -56,12 +65,3 @@ tasks.create("buildNoExtension") {
         delete fileTree(dir: 'build/bin/native/' , include: '**/timecard.kexe')
     }
 }
-
-tasks.create("jar") {
-    doLast {
-        exec {
-            commandLine "echo", "Ah, you must be snapcraft. This is not a JVM project, so the jar task does nothing. I hope you ran buildNoExtension..."
-        }
-    }
-}
-
