@@ -61,6 +61,7 @@ tasks.create("buildNoExtension") {
             rename "timecard.kexe", "timecard"
             duplicatesStrategy DuplicatesStrategy.INCLUDE
         }
-        delete fileTree(dir: 'build/bin/native/' , include: '**/timecard.kexe')
+        delete("build/bin/native/debugExecutable/timecard.kexe")
+        delete("build/bin/native/releaseExecutable/timecard.kexe")
     }
 }
