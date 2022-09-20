@@ -19,13 +19,15 @@ apps:
       XDG_DATA_HOME: "$SNAP_USER_COMMON/"
 parts:
   timecard:
-    plugin: make
+    plugin: nil
     source: https://github.com/Stephen-Hamilton-C/timecard.git
     #source-tag: v$SNAPCRAFT_PROJECT_VERSION
     #source-branch: <branch>
     source-branch: main
     build-packages:
       - default-jre-headless
-    build-environment:
-      - prefix: $SNAP/bin
+    override-build: |
+      ./gradlew linkReleaseExecutableNative
+      cp ./build/bin/native/releaseExecutable/timecard.kexe $SNAP/bin/timecard
+      snapcraftctl build
 confinement: strict
