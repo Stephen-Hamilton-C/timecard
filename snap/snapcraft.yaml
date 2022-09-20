@@ -21,7 +21,6 @@ parts:
   timecard:
     plugin: kotlin-native
     source: https://github.com/Stephen-Hamilton-C/timecard.git
-    my-property: "Hello!"
     #source-tag: v$SNAPCRAFT_PROJECT_VERSION
     #source-branch: <branch>
     source-branch: main
