@@ -19,7 +19,7 @@ apps:
       XDG_DATA_HOME: "$SNAP_USER_COMMON/"
 parts:
   timecard:
-    plugin: kotlin-native
+    plugin: kotlin
     source: https://github.com/Stephen-Hamilton-C/timecard.git
     #source-tag: v$SNAPCRAFT_PROJECT_VERSION
     #source-branch: <branch>
