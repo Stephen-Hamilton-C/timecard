@@ -10,7 +10,7 @@ description: |
   Quick syntax allows time tracking to be easy, while also being customizable.
   Supports quarter-hour rounding, 24-hour time, and automatic cleanup.
   Written in Kotlin Native, for rapid fast response.
-base: core20
+  #base: core20
 apps:
   timecard:
     command: $SNAP/timecard
