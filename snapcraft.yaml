@@ -13,7 +13,7 @@ description: |
 base: core20
 apps:
   timecard:
-    command: $SNAP/bin/timecard
+    command: $SNAP/timecard
     environment:
       XDG_CONFIG_HOME: "$SNAP_USER_DATA/"
       XDG_DATA_HOME: "$SNAP_USER_COMMON/"
@@ -28,6 +28,6 @@ parts:
       - default-jre-headless
     override-build: |
       ./gradlew linkReleaseExecutableNative
-      cp ./build/bin/native/releaseExecutable/timecard.kexe $SNAP/bin/timecard
+      cp ./build/bin/native/releaseExecutable/timecard.kexe $SNAP/timecard
       snapcraftctl build
 confinement: strict
