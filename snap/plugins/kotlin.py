@@ -1,3 +1,8 @@
+import snapcraft
+
+
+class MyPlugin(snapcraft.BasePlugin):
+
     @classmethod
     def schema(cls):
         schema = super().schema()
