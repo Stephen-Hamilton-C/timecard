@@ -25,7 +25,7 @@ kotlin {
     if (hostOs == "Mac OS X") nativeTarget = macosX64('native')
     else if (hostOs == "Linux") nativeTarget = linuxX64("native")
     else if (isMingwX64) nativeTarget = mingwX64("native")
-    else throw new GradleException("Host OS is not supported in Kotlin/Native.")
+    else throw new GradleException("Host OS "+hostOs+" is not supported in Kotlin/Native.")
 
     nativeTarget.with {
         binaries {
@@ -51,17 +51,28 @@ kotlin {
     }
 }
 
-tasks.create("buildNoExtension") {
+tasks.create("buildSnap") {
     group "build"
-    dependsOn "build"
+    doFirst {
+        def src = new File('snap/snapcraft.yaml')
+        def dst = new File('snap/snapcraft.yaml.orig')
+        dst.write(src.text)
+    }
+
     doLast {
-        copy {
-            from layout.buildDirectory.dir("bin/native/")
-            into layout.buildDirectory.dir("bin/native/")
-            rename "timecard.kexe", "timecard"
-            duplicatesStrategy DuplicatesStrategy.INCLUDE
+        new File( 'snap/snapcraft.yaml' ).withWriter { w ->
+            new File( 'snap/snapcraft.yaml.orig' ).eachLine { line ->
+                w << line.replaceAll( 'version: \'0\'', 'version: \''+appVersion+'\'' ) + "\n"
+            }
         }
-        delete("build/bin/native/debugExecutable/timecard.kexe")
-        delete("build/bin/native/releaseExecutable/timecard.kexe")
+
+        exec {
+            commandLine "snapcraft"
+        }
+
+        def src = new File('snap/snapcraft.yaml.orig')
+        def dst = new File('snap/snapcraft.yaml')
+        dst.write(src.text)
+        delete("./snap/snapcraft.yaml.orig")
     }
 }

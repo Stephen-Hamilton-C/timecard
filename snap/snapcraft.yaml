@@ -1,5 +1,6 @@
 name: timecard
-version: '0.1.0-SNAPSHOT'
+# Version will be set by the buildSnap Gradle task
+version: '0'
 source-code: https://github.com/Stephen-Hamilton-C/timecard
 license: GPL-3.0
 summary: Simple commandline time tracking program, written in Kotlin Native
