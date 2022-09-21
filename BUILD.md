@@ -13,3 +13,11 @@
 3. Run `./gradlew buildSnap`
 4. Run `snap install ./timecard_*.snap --devmode`
 5. Run `timecard help` to get started
+
+## Fedora/RHEL
+1. Run `sudo dnf install -y rpmdevtools rpmlint`
+2. Run `./gradlew buildRPM`
+3. Install the RPM with your package manager:
+   - `sudo dnf install ~/rpmbuild/RPMS/*/timecard-*.rpm`
+   - `sudo yum install ~/rpmbuild/RPMS/*/timecard-*.rpm`
+   - `sudo rpm -ivh ~/rpmbuild/RPMS/*/timecard-*.rpm`
