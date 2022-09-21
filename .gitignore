@@ -19,3 +19,7 @@ gradle-app.setting
 # Non-portable Symbolic Link to built executable
 timecard.kexe
 timecard
+
+# Snap build artifacts
+*.snap
+__pycache__
