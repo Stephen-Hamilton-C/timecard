@@ -2,7 +2,6 @@ name: timecard
 version: '0.1.0-SNAPSHOT'
 source-code: https://github.com/Stephen-Hamilton-C/timecard
 license: GPL-3.0
-#icon: "icon.png"
 summary: Simple commandline time tracking program, written in Kotlin Native
 description: |
   timecard is a command line time tracking program
@@ -19,17 +18,9 @@ apps:
       XDG_DATA_HOME: "$SNAP_USER_COMMON/"
 parts:
   timecard:
-    # See snap/plugins/timecard.py
-    #plugin: timecard
     plugin: kotlin-native
     source: ../
-    #source: https://github.com/Stephen-Hamilton-C/timecard.git
-    #source-tag: v$SNAPCRAFT_PROJECT_VERSION
-    #source-branch: <branch>
     source-branch: main
     build-packages:
       - default-jre-headless
-        #override-build: |
-        #./gradlew linkReleaseExecutableNative
-        #snapcraftctl build
 confinement: strict
