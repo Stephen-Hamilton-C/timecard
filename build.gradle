@@ -54,6 +54,10 @@ kotlin {
 tasks.create("buildSnap") {
     group "build"
     doFirst {
+        if(System.getProperty("os.name") != "Linux") {
+            throw new GradleException("Snaps can only be built on Linux.")
+        }
+
         def src = new File('snap/snapcraft.yaml')
         def dst = new File('snap/snapcraft.yaml.orig')
         dst.write(src.text)
@@ -62,7 +66,11 @@ tasks.create("buildSnap") {
     doLast {
         new File( 'snap/snapcraft.yaml' ).withWriter { w ->
             new File( 'snap/snapcraft.yaml.orig' ).eachLine { line ->
-                w << line.replaceAll( 'version: \'0\'', 'version: \''+appVersion+'\'' ) + "\n"
+                if(line.startsWith("version:")) {
+                    w << "version: '" + appVersion + "'\n"
+                } else {
+                    w << line + "\n"
+                }
             }
         }
 
@@ -74,5 +82,46 @@ tasks.create("buildSnap") {
         def dst = new File('snap/snapcraft.yaml')
         dst.write(src.text)
         delete("./snap/snapcraft.yaml.orig")
+    }
+}
+
+tasks.create("buildRPM") {
+    group "build"
+    doFirst {
+        if(System.getProperty("os.name") != "Linux") {
+            throw new GradleException("RPMs can only be built on Linux.")
+        }
+        def src = new File('timecard.spec')
+        def dst = new File('timecard.spec.orig')
+        dst.write(src.text)
+
+        new File( 'timecard.spec' ).withWriter { w ->
+            new File( 'timecard.spec.orig' ).eachLine { line ->
+                if(line.startsWith("Version:")) {
+                    w << "Version:        " + appVersion + "\n"
+                } else {
+                    w << line + "\n"
+                }
+            }
+        }
+
+        exec {
+            commandLine "rpmdev-setuptree"
+        }
+        exec {
+            commandLine "spectool", "-g", "-R", "-f", "timecard.spec"
+        }
+    }
+
+    doLast {
+        exec {
+            commandLine "rpmbuild", "-bb", "timecard.spec"
+        }
+        println "Built RPM to ~/rpmbuild/RPMS/"
+
+        def src = new File('timecard.spec.orig')
+        def dst = new File('timecard.spec')
+        dst.write(src.text)
+        delete('timecard.spec.orig')
     }
 }
