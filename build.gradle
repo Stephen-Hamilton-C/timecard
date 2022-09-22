@@ -58,14 +58,15 @@ tasks.create("buildSnap") {
             throw new GradleException("Snaps can only be built on Linux.")
         }
 
+	new File('snap/local').mkdirs()
         def src = new File('snap/snapcraft.yaml')
-        def dst = new File('snap/snapcraft.yaml.orig')
+        def dst = new File('snap/local/snapcraft.yaml.orig')
         dst.write(src.text)
     }
 
     doLast {
         new File( 'snap/snapcraft.yaml' ).withWriter { w ->
-            new File( 'snap/snapcraft.yaml.orig' ).eachLine { line ->
+            new File( 'snap/local/snapcraft.yaml.orig' ).eachLine { line ->
                 if(line.startsWith("version:")) {
                     w << "version: '" + appVersion + "'\n"
                 } else {
@@ -78,10 +79,10 @@ tasks.create("buildSnap") {
             commandLine "snapcraft"
         }
 
-        def src = new File('snap/snapcraft.yaml.orig')
+        def src = new File('snap/local/snapcraft.yaml.orig')
         def dst = new File('snap/snapcraft.yaml')
         dst.write(src.text)
-        delete("./snap/snapcraft.yaml.orig")
+        delete("./snap/local/snapcraft.yaml.orig")
     }
 }
 

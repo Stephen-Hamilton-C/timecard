@@ -22,3 +22,5 @@ timecard
 
 # Snap build artifacts
 *.snap
+__pycache__
+snap/local/snapcraft.yaml.orig
