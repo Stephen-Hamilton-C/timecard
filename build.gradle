@@ -126,3 +126,42 @@ tasks.create("buildRPM") {
         delete('timecard.spec.orig')
     }
 }
+
+tasks.create("buildDeb") {
+    group "build"
+    doFirst {
+        if(System.getProperty("os.name") != "Linux") {
+            throw new GradleException("Debs can only be built on Linux.")
+        }
+
+        // Executable
+        copy {
+            from "build/bin/native/releaseExecutable/"
+            into "build/debian/timecard/"
+            rename ("timecard.kexe", "timecard")
+        }
+
+        // Debian packaging files
+        copy {
+            from "debian/"
+            into "build/debian/timecard/debian"
+        }
+
+        // Docs
+        copy {
+            from rootProject.files("LICENSE", "CHANGELOG.md", "README.md")
+            into "build/debian/timecard"
+        }
+
+        // TODO: Convert CHANGELOG.md into build/debian/timecard/debian/changelog
+        // Or maybe just ignore it and make a dummy changelog. It honestly seems like a lot of unnecessary work
+    }
+
+    doLast {
+        exec {
+            workingDir "build/debian/timecard",
+            commandLine "debuild", "-i", "-us", "-uc", "-b"
+        }
+    }
+}
+
