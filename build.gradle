@@ -161,8 +161,8 @@ tasks.create("buildDeb") {
 
     doLast {
         exec {
-            workingDir "build/debian/timecard",
-            commandLine "debuild", "-i", "-us", "-uc", "-b"
+            workingDir "build/debian/timecard"
+            commandLine "debuild -i -us -uc -b"
         }
     }
 }
