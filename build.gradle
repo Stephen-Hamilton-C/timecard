@@ -118,6 +118,8 @@ tasks.create("buildRPM") {
             commandLine "rpmbuild", "-bb", "timecard.spec"
         }
         println "Built RPM to ~/rpmbuild/RPMS/"
+        println "If you are uploading this package to a repository, ensure you run 'rpm --addsign ~/rpmbuild/RPMS/*/timecard-*.rpm'"
+
 
         def src = new File('timecard.spec.orig')
         def dst = new File('timecard.spec')
@@ -125,3 +127,4 @@ tasks.create("buildRPM") {
         delete('timecard.spec.orig')
     }
 }
+
