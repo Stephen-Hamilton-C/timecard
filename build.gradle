@@ -139,31 +139,44 @@ tasks.create("buildDeb") {
         // Executable
         copy {
             from "build/bin/native/releaseExecutable/"
-            into "build/debian/timecard/"
+            into "build/deb/timecard/"
             rename ("timecard.kexe", "timecard")
         }
 
         // Debian packaging files
         copy {
-            from "debian/"
-            into "build/debian/timecard/debian"
+            from "deb/"
+            into "build/deb/timecard/debian"
         }
 
         // Docs
         copy {
             from rootProject.files("LICENSE", "CHANGELOG.md", "README.md")
-            into "build/debian/timecard"
+            into "build/deb/timecard"
         }
 
         // TODO: Convert CHANGELOG.md into build/debian/timecard/debian/changelog
         // Or maybe just ignore it and make a dummy changelog. It honestly seems like a lot of unnecessary work
+        new File('build/deb/timecard/debian/changelog').withWriter { w ->
+           w << "timecard ("+appVersion+"-"+debianVersion+") release; urgency=medium\n"
+           w << "\n"
+           w << "  * See https://github.com/Stephen-Hamilton-C/timecard/blob/main/CHANGELOG.md\n"
+           w << "    for a full list of changes\n"
+           w << "\n"
+        }
+        exec {
+            workingDir "build/deb/timecard/debian"
+            commandLine 'LANG=C echo " -- Stephen Hamilton <stephen.hamilton.c@gmail.com>  `date -R`' >> changelog
+        }
     }
 
     doLast {
+/*
         exec {
-            workingDir "build/debian/timecard"
+            workingDir "build/deb/timecard"
             commandLine "debuild -i -us -uc -b"
         }
+*/
     }
 }
 

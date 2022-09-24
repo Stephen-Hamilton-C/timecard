@@ -1,0 +1,17 @@
+Source: timecard
+Maintainer: Stephen Hamilton <stephen.hamilton.c@gmail.com>
+Section: utils
+Priority: optional
+Build-Depends: debhelper (>= 9) default-jre (>= 1.8) | openjdk-8-jre-headless | openjdk-11-jre-headless | openjdk-17-jre-headless
+Standards-Version: 4.5.0
+Homepage: https://github.com/Stephen-Hamilton-C/timecard
+
+Package: timecard
+Architecture: any
+Homepage: https://github.com/Stephen-Hamilton-C/timecard
+Description: Simple commandline time tracking program, written in Kotlin Native
+ timecard is a command line time tracking program
+ written by a developer, for developers.
+ Quick syntax allows time tracking to be easy, while also being customizable.
+ Supports quarter-hour rounding, 24-hour time, and automatic cleanup.
+ Written in Kotlin Native, for rapid fast response.
