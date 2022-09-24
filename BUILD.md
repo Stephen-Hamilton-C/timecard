@@ -14,6 +14,12 @@
 4. Run `snap install ./timecard_*.snap --devmode`
 5. Run `timecard help` to get started
 
+## Debian/Ubuntu
+1. Run `sudo apt install build-essential devscripts debhelper`
+2. Run `./gradlew buildDeb`
+3. Run `sudo apt install ./build/deb/timecard_*.deb`
+4. Run `timecard help` to get started
+
 ## Fedora/RHEL
 1. Run `sudo dnf install -y rpmdevtools rpmlint`
 2. Run `./gradlew buildRPM`
