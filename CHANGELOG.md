@@ -2,7 +2,7 @@
 All notable changes to timecard will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-timecard-kt uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+timecard uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 # Versions <!-- omit in toc -->
 
