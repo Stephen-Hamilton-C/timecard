@@ -1,0 +1,92 @@
+; Referencing RepoZ NSIS install config
+; https://github.com/awaescher/RepoZ/blob/496d4f7539670112772b81e208c2ce650164e101/_setup/RepoZ.nsi
+
+;Include Modern UI
+!include "MUI2.nsh"
+
+!define APP_NAME "timecard"
+!define APP_VERSION "0"
+!define PUBLISHER "Stephen-Hamilton-C"
+!define WEB_SITE "https://github.com/Stephen-Hamilton-C/${APP_NAME}"
+!define REGKEY_DIR "Software\Microsoft\Windows\CurrentVersion\App Paths\${APP_NAME}"
+!define REGKEY_UNINST "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}"
+
+;Basic configuration
+Name "${APP_NAME}"
+OutFile "${APP_NAME}-${APP_VERSION}_installer.exe"
+Unicode True
+;Default installation folder
+InstallDir "$PROGRAMFILES64\${APP_NAME}"
+InstallDirRegKey HKLM "${REGKEY_DIR}" ""
+;Request admin privileges for Vista/7/8/10
+RequestExecutionLevel admin
+!define MUI_ABORTWARNING
+
+;Pages
+!insertmacro MUI_PAGE_LICENSE "LICENSE"
+!insertmacro MUI_PAGE_COMPONENTS
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES  
+  
+;Languages
+!insertmacro MUI_LANGUAGE "English"
+
+;Installer Sections
+Section "${APP_NAME}" SecInstall
+    SetOutPath "$INSTDIR"
+    FILE "LICENSE"
+    FILE "build\bin\native\releaseExecutable\${APP_NAME}.exe"
+SectionEnd
+Section "Add to PATH" SecPath
+    SetOutPath "$INSTDIR"
+    FILE "PathEd.exe"
+    ExecWait '$INSTDIR\PathEd.exe add "$INSTDIR"'
+SectionEnd
+Section -Post
+    ; Uninstaller
+    WriteUninstaller "$INSTDIR\uninstall.exe"
+    CreateDirectory "$SMPROGRAMS\${APP_NAME}"
+    CreateShortCut "$SMPROGRAMS\${APP_NAME}\Uninstall ${APP_NAME}.lnk" "$INSTDIR\uninstall.exe"
+
+    ; Registry keys
+    WriteRegStr HKLM "${REGKEY_DIR}" "" "$INSTDIR\${APP_NAME}.exe"
+    WriteRegStr HKLM "${REGKEY_UNINST}" "DisplayName" "${APP_NAME}"
+    WriteRegStr HKLM "${REGKEY_UNINST}" "DisplayVersion" "${APP_VERSION}"
+    WriteRegStr HKLM "${REGKEY_UNINST}" "UninstallString" "$INSTDIR\uninstall.exe"
+    WriteRegStr HKLM "${REGKEY_UNINST}" "DisplayIcon" "$INSTDIR\${APP_NAME}.exe"
+    WriteRegStr HKLM "${REGKEY_UNINST}" "URLInfoAbout" "${WEB_SITE}"
+    WriteRegStr HKLM "${REGKEY_UNINST}" "Publisher" "${PUBLISHER}"
+SectionEnd
+Section Uninstall
+    ExecWait '$INSTDIR\PathEd.exe remove "$INSTDIR"'
+
+    Delete "$INSTDIR\${APP_NAME}.exe"
+    Delete "$INSTDIR\LICENSE"
+    Delete "$INSTDIR\uninstall.exe"
+    Delete "$INSTDIR\PathEd.exe"
+    RMDir "$INSTDIR"
+
+    ; Delete uninstaller shortcut
+    Delete "$SMPROGRAMS\${APP_NAME}\Uninstall ${APP_NAME}.lnk"
+    RMDir "$SMPROGRAMS\${APP_NAME}"
+
+    ; Delete configuration files
+    Delete "$LOCALAPPDATA\stephen-hamilton-c\${APP_NAME}\timecard_*.json"
+    Delete "$LOCALAPPDATA\stephen-hamilton-c\${APP_NAME}\config.yml"
+    RMDir "$LOCALAPPDATA\stephen-hamilton-c\${APP_NAME}"
+    RMDir "$LOCALAPPDATA\stephen-hamilton-c"
+
+    ; Delete Registry Keys
+    DeleteRegKey HKLM "${REGKEY_DIR}"
+    DeleteRegKey HKLM "${REGKEY_UNINST}"
+SectionEnd
+
+Function .onInit
+  SectionSetFlags ${SecInstall} 17
+FunctionEnd
+
+;Descriptions
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecInstall} "Installs ${APP_NAME}."
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecPath} "Adds ${APP_NAME} to your PATH so it can be quickly accessed in command line."
+!insertmacro MUI_FUNCTION_DESCRIPTION_END

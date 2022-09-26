@@ -24,3 +24,6 @@ timecard
 *.snap
 __pycache__
 snap/local/snapcraft.yaml.orig
+
+# Windows build artifacts
+timecard-*_installer.exe
