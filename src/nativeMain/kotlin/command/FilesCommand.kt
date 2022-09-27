@@ -11,8 +11,12 @@ class FilesCommand : ICommand {
 	override val shortDescription: String = description
 	
 	override fun execute(args: List<String>) {
-		println("Config files are located at ${cyan(Configuration.configDir)}")
-		println("Data files are located at ${cyan(TimeEntries.dataDir)}")
+		if(Configuration.configDir == TimeEntries.dataDir) {
+			println("Config and data files are located at ${cyan(TimeEntries.dataDir)}")
+		} else {
+			println("Config files are located at ${cyan(Configuration.configDir)}")
+			println("Data files are located at ${cyan(TimeEntries.dataDir)}")
+		}
 	}
 	
 }
