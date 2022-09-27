@@ -61,13 +61,12 @@ tasks {
 	createInstaller {
 		dependsOn "linkReleaseExecutableNative"
 		doFirst {
-		    // TODO: Make better names in all tasks for these, and reuse these defs
-		    def src = new File('config.nsis')
-			def dst = new File('config.nsis.orig')
-			dst.write(src.text)
+		    def configFile = new File('config.nsis')
+			def origConfigFile = new File('config.nsis.orig')
+			origConfigFile.write(configFile.text)
 			
-			new File('config.nsis').withWriter { w -> 
-			    new File('config.nsis.orig').eachLine { line ->
+			configFile.withWriter { w ->
+			    origConfigFile.eachLine { line ->
 				    if(line.startsWith("!define APP_VERSION")) {
 					    w << "!define APP_VERSION \""+appVersion+"\"\n"
 					} else {
@@ -78,9 +77,9 @@ tasks {
 		}
 		
 		doLast {
-		    def src = new File('config.nsis.orig')
-			def dst = new File('config.nsis')
-			dst.write(src.text)
+		    def origConfigFile = new File('config.nsis.orig')
+			def configFile = new File('config.nsis')
+			configFile.write(origConfigFile.text)
 			delete('config.nsis.orig')
 	    }
 	}
@@ -93,15 +92,17 @@ tasks.create("buildSnap") {
             throw new GradleException("Snaps can only be built on Linux.")
         }
 
-	new File('snap/local').mkdirs()
-        def src = new File('snap/snapcraft.yaml')
-        def dst = new File('snap/local/snapcraft.yaml.orig')
-        dst.write(src.text)
+    	new File('snap/local').mkdirs()
+        def snapcraftFile = new File('snap/snapcraft.yaml')
+        def origSnapcraftFile = new File('snap/local/snapcraft.yaml.orig')
+        origSnapcraftFile.write(snapcraftFile.text)
     }
 
     doLast {
-        new File( 'snap/snapcraft.yaml' ).withWriter { w ->
-            new File( 'snap/local/snapcraft.yaml.orig' ).eachLine { line ->
+        def origSnapcraftFile = new File('snap/local/snapcraft.yaml.orig')
+        def snapcraftFile = new File('snap/snapcraft.yaml')
+        snapcraftFile.withWriter { w ->
+            origSnapcraftFile.eachLine { line ->
                 if(line.startsWith("version:")) {
                     w << "version: '" + appVersion + "'\n"
                 } else {
@@ -114,9 +115,7 @@ tasks.create("buildSnap") {
             commandLine "snapcraft"
         }
 
-        def src = new File('snap/local/snapcraft.yaml.orig')
-        def dst = new File('snap/snapcraft.yaml')
-        dst.write(src.text)
+        snapcraftFile.write(origSnapcraftFile.text)
         delete("./snap/local/snapcraft.yaml.orig")
     }
 }
@@ -127,17 +126,19 @@ tasks.create("buildRPM") {
         if(System.getProperty("os.name") != "Linux") {
             throw new GradleException("RPMs can only be built on Linux.")
         }
-        def src = new File('timecard.spec')
-        def dst = new File('timecard.spec.orig')
-        dst.write(src.text)
+        def specFile = new File('timecard.spec')
+        def origSpecFile = new File('timecard.spec.orig')
+        origSpecFile.write(specFile.text)
 
-        new File( 'timecard.spec' ).withWriter { w ->
-            new File( 'timecard.spec.orig' ).eachLine { line ->
+        specFile.withWriter { w ->
+            origSpecFile.eachLine { line ->
                 if(line.startsWith("Version:")) {
                     w << "Version:        " + appVersion + "\n"
                 } else if(line.startsWith("Release:")) {
                     if (debianVersion != "") {
                         w << "Release:        " + debianVersion + "\n"
+                    } else {
+                        w << "\n"
                     }
                 } else {
                     w << line + "\n"
@@ -161,9 +162,9 @@ tasks.create("buildRPM") {
         println "If you are uploading this package to a repository, ensure you run 'rpm --addsign ~/rpmbuild/RPMS/*/timecard-*.rpm'"
 
 
-        def src = new File('timecard.spec.orig')
-        def dst = new File('timecard.spec')
-        dst.write(src.text)
+        def origSpecFile = new File('timecard.spec.orig')
+        def specFile = new File('timecard.spec')
+        specFile.write(origSpecFile.text)
         delete('timecard.spec.orig')
     }
 }
@@ -200,8 +201,6 @@ tasks.create("buildDeb") {
             into "build/deb/timecard"
         }
 
-        // TODO: Convert CHANGELOG.md into build/debian/timecard/debian/changelog
-        // Or maybe just ignore it and make a dummy changelog. It honestly seems like a lot of unnecessary work
         new File('build/deb/timecard/debian/changelog').withWriter { w ->
            def version = (debianVersion != "") ? appVersion+"-"+debianVersion : appVersion
            w << "timecard ("+version+") unstable; urgency=medium\n"
