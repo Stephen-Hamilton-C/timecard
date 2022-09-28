@@ -4,7 +4,7 @@
 - Download and install [JDK 11 or higher](https://www.oracle.com/java/technologies/downloads/#java17)
 
 ## Any Platform
-1. Run `./gradlew linkReleaseExecutableNative`, or `.\gradlew.bat linkReleaseExecutableNative` on Windows 2. 
+1. Run `./gradlew linkReleaseExecutableNative`, or `.\gradlew.bat linkReleaseExecutableNative` on Windows
 2. Find the `.kexe` or `.exe` file in `./build/bin/native/releaseExecutable`
 
 ## Linux Snap
@@ -20,10 +20,17 @@
 3. Run `sudo apt install ./build/deb/timecard_*.deb`
 4. Run `timecard help` to get started
 
-## Fedora/RHEL
-1. Run `sudo dnf install -y rpmdevtools rpmlint`
+## Fedora/CentOS/RHEL
+1. Use your package manager to install `rpmdevtools` and `rpmlint`
+  - `sudo dnf install -y rpmdevtools rpmlint`
+  - `sudo yum install -y rpmdevtools rpmlint rpm-build`
 2. Run `./gradlew buildRPM`
 3. Install the RPM with your package manager:
    - `sudo dnf install ~/rpmbuild/RPMS/*/timecard-*.rpm`
    - `sudo yum install ~/rpmbuild/RPMS/*/timecard-*.rpm`
-   - `sudo rpm -ivh ~/rpmbuild/RPMS/*/timecard-*.rpm`
+   
+## Windows
+1. Run `.\gradlew.bat createInstaller`
+2. Run the installer, `timecard-*.*.*_installer.exe`, in the project root.
+  2a. If Windows Features prompts you about .NET, tell it to Download and Install, uninstall timecard, and re-run the installer.
+3. If added to PATH, run `timecard help` to get started.
