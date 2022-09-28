@@ -1,0 +1,32 @@
+nsis {
+    runIn = file(rootProject.projectDir)
+	destinationFolder = file(rootProject.projectDir)
+}
+
+tasks {
+	createInstaller {
+		dependsOn "linkReleaseExecutableNative"
+		doFirst {
+		    def configFile = new File('config.nsis')
+			def origConfigFile = new File('config.nsis.orig')
+			origConfigFile.write(configFile.text)
+			
+			configFile.withWriter { w ->
+			    origConfigFile.eachLine { line ->
+				    if(line.startsWith("!define APP_VERSION")) {
+					    w << "!define APP_VERSION \""+appVersion+"\"\n"
+					} else {
+						w << line + "\n"
+				    }
+				}
+			}
+		}
+		
+		doLast {
+		    def origConfigFile = new File('config.nsis.orig')
+			def configFile = new File('config.nsis')
+			configFile.write(origConfigFile.text)
+			delete('config.nsis.orig')
+	    }
+	}
+}

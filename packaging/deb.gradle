@@ -1,0 +1,54 @@
+tasks.create("buildDeb") {
+    group "build"
+    dependsOn "linkReleaseExecutableNative"
+    doFirst {
+        if(System.getProperty("os.name") != "Linux") {
+            throw new GradleException("Debs can only be built on Linux.")
+        }
+
+        // Cleanup
+        delete {
+            delete "build/deb"
+        }
+
+        // Executable
+        copy {
+            from "build/bin/native/releaseExecutable/"
+            into "build/deb/timecard/"
+            rename ("timecard.kexe", "timecard")
+        }
+
+        // Debian packaging files
+        copy {
+            from "deb/"
+            into "build/deb/timecard/debian"
+        }
+
+        // Docs
+        copy {
+            from rootProject.files("LICENSE", "CHANGELOG.md", "README.md")
+            into "build/deb/timecard"
+        }
+
+        new File('build/deb/timecard/debian/changelog').withWriter { w ->
+           def version = (debianVersion != "") ? appVersion+"-"+debianVersion : appVersion
+           w << "timecard ("+version+") unstable; urgency=medium\n"
+           w << "\n"
+           w << "  * See https://github.com/Stephen-Hamilton-C/timecard/blob/main/CHANGELOG.md\n"
+           w << "    for a full list of changes\n"
+           w << "\n"
+        }
+        exec {
+            workingDir "build/deb/timecard/debian"
+            environment LANG: "C"
+            commandLine 'sh', '-c', 'echo " -- Stephen Hamilton <stephen.hamilton.c@gmail.com>  `date -R`" >> changelog'
+        }
+    }
+
+    doLast {
+        exec {
+            workingDir "build/deb/timecard"
+            commandLine "debuild", "-i", "-us", "-uc", "-b"
+        }
+    }
+}

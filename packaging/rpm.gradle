@@ -1,0 +1,48 @@
+tasks.create("buildRPM") {
+    group "build"
+    doFirst {
+        if(System.getProperty("os.name") != "Linux") {
+            throw new GradleException("RPMs can only be built on Linux.")
+        }
+        def specFile = new File('timecard.spec')
+        def origSpecFile = new File('timecard.spec.orig')
+        origSpecFile.write(specFile.text)
+
+        specFile.withWriter { w ->
+            origSpecFile.eachLine { line ->
+                if(line.startsWith("Version:")) {
+                    w << "Version:        " + appVersion + "\n"
+                } else if(line.startsWith("Release:")) {
+                    if (debianVersion != "") {
+                        w << "Release:        " + debianVersion + "\n"
+                    } else {
+                        w << "\n"
+                    }
+                } else {
+                    w << line + "\n"
+                }
+            }
+        }
+
+        exec {
+            commandLine "rpmdev-setuptree"
+        }
+        exec {
+            commandLine "spectool", "-g", "-R", "-f", "timecard.spec"
+        }
+    }
+
+    doLast {
+        exec {
+            commandLine "rpmbuild", "-bb", "timecard.spec"
+        }
+        println "Built RPM to ~/rpmbuild/RPMS/"
+        println "If you are uploading this package to a repository, ensure you run 'rpm --addsign ~/rpmbuild/RPMS/*/timecard-*.rpm'"
+
+
+        def origSpecFile = new File('timecard.spec.orig')
+        def specFile = new File('timecard.spec')
+        specFile.write(origSpecFile.text)
+        delete('timecard.spec.orig')
+    }
+}
