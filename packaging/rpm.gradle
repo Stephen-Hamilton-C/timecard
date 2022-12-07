@@ -16,7 +16,7 @@ tasks.create("buildRPM") {
                     if (debianVersion != "") {
                         w << "Release:        " + debianVersion + "\n"
                     } else {
-                        w << "\n"
+                        w << "Release:        0\n"
                     }
                 } else {
                     w << line + "\n"
