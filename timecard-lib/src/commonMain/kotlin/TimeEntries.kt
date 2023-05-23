@@ -75,7 +75,14 @@ class TimeEntries() : ITimeEntries {
     }
 
     override fun calculateMinutesWorked(date: LocalDate): Long {
-        TODO("Implement calculateMinutesWorked")
+        var totalMinutes = 0L
+        for(entry in _entries) {
+            val endTime = entry.end ?: Clock.System.now()
+            val duration = endTime - entry.start
+            totalMinutes += duration.inWholeMinutes()
+        }
+
+        return totalMinutes
     }
 
     override fun calculateMinutesOnBreak(date: LocalDate): Long {
