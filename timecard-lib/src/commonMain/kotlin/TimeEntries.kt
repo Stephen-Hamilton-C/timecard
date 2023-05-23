@@ -23,7 +23,15 @@ class TimeEntries() : ITimeEntries {
     override fun toString(): String = _entries.joinToString(";")
 
     override fun filterByDate(date: LocalDate): List<TimeEntry> {
-        TODO("Implement filterByDate")
+        return _entries.filter {
+            val startDate = it.start.toLocalDateTime(TimeZone.currentSystemDefault()).date
+            val endDate = it.end?.toLocalDateTime(TimeZone.currentSystemDefault()).date
+            return if(endDate == null) {
+                startDate == date
+            } else {
+                startDate == date || endDate == date
+            }
+        }
     }
 
     private fun timeIsFuture(time: Instant): Boolean {
@@ -76,7 +84,7 @@ class TimeEntries() : ITimeEntries {
 
     override fun calculateMinutesWorked(date: LocalDate): Long {
         var totalMinutes = 0L
-        for(entry in _entries) {
+        for(entry in filterByDate(date)) {
             val endTime = entry.end ?: Clock.System.now()
             val duration = endTime - entry.start
             totalMinutes += duration.inWholeMinutes()
@@ -87,9 +95,9 @@ class TimeEntries() : ITimeEntries {
 
     override fun calculateMinutesOnBreak(date: LocalDate): Long {
         var totalMinutes = 0L
-        for(i in 0 until _entries.size) {
-            val currentEntry = _entries[i]
-            val nextEntry = _entries.getOrNull(i + 1)
+        val entriesForDate = filterByDate(date)
+        for((i, currentEntry) in entriesForDate.withIndex()) {
+            val nextEntry = entriesForDate.getOrNull(i + 1)
 
             if(currentEntry.end != null) {
                 val nextStartTime = nextEntry?.start ?: Clock.System.now()
