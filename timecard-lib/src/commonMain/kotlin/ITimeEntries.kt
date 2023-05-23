@@ -10,8 +10,8 @@ interface ITimeEntries {
     override fun toString(): String
 
     fun filterByDate(date: LocalDate = Util.today()): List<TimeEntry>
-    fun clockIn(time: Instant = Clock.System.now())
-    fun clockOut(time: Instant = Clock.System.now())
+    fun clockIn(time: Instant = Clock.System.now()): ClockResult
+    fun clockOut(time: Instant = Clock.System.now()): ClockResult
     fun undo()
     fun calculateMinutesWorked(date: LocalDate = Util.today()): Long
     fun calculateMinutesOnBreak(date: LocalDate = Util.today()): Long

@@ -12,27 +12,72 @@ class TimeEntries() : ITimeEntries {
         get() = !isClockedIn
 
     override fun load(data: String) {
-        TODO("Implement load")
+        _entries.clear()
+
+        val entriesData = data.split(";")
+        for(entryData in entriesData) {
+            val entry = TimeEntry.from(entryData)
+            _entries.add(entry)
+        }
     }
-    override fun toString(): String {
-        TODO("Implement toString")
-    }
+    override fun toString(): String = _entries.joinToString(";")
 
     override fun filterByDate(date: LocalDate): List<TimeEntry> {
         TODO("Implement filterByDate")
     }
-    override fun clockIn(time: Instant) {
-        TODO("Implement clockIn")
+
+    private fun timeIsFuture(time: Instant): Boolean {
+        val now = Clock.System.now()
+        return now < time
     }
-    override fun clockOut(time: Instant) {
-        TODO("Implement clockOut")
+
+    override fun clockIn(time: Instant): ClockResult {
+        if(isClockedIn) return ClockResult.NO_OP
+        if(timeIsFuture(time)) return ClockResult.TIME_IN_FUTURE
+        
+        val lastEntry = entries.lastOrNull()
+        if(lastEntry != null && lastEntry.end >= time)
+            return ClockResult.TIME_TOO_EARLY
+
+        val newEntry = TimeEntry(time)
+        _entries.add(newEntry)
+
+        return ClockResult.SUCCESS
     }
+
+    override fun clockOut(time: Instant): ClockResult {
+        if(isClockedOut) return ClockResult.NO_OP
+        if(timeIsFuture(time)) return ClockResult.TIME_IN_FUTURE
+
+        val lastEntry = entries.last()
+        if(lastEntry.start >= time)
+            return ClockResult.TIME_TOO_EARLY
+
+        val newEntry = TimeEntry(lastEntry.start, time)
+        _entries.removeLast()
+        _entries.add(newEntry)
+
+        return ClockResult.SUCCESS
+    }
+
     override fun undo() {
-        TODO("Implement undo")
+        if(_entries.isEmpty()) return UndoResult.NO_OP
+
+        if(isClockedIn) {
+            _entries.removeLast()
+        } else {
+            val lastEntry = _entries.removeLast()
+            val newEntry = TimeEntry(lastEntry.start)
+            _entries.add(newEntry)
+        }
+
+        return UndoResult.SUCCESS
     }
+
     override fun calculateMinutesWorked(date: LocalDate): Long {
         TODO("Implement calculateMinutesWorked")
     }
+
     override fun calculateMinutesOnBreak(date: LocalDate): Long {
         TODO("Implement calculateMinutesOnBreak")
     }

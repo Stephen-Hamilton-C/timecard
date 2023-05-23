@@ -29,14 +29,16 @@ class TimeEntriesModel : ViewModel(), ITimeEntries {
         return timeEntries.filterByDate(date)
     }
 
-    override fun clockIn(time: Instant) {
-        timeEntries.clockIn(time)
+    override fun clockIn(time: Instant): ClockResult {
+        val result = timeEntries.clockIn(time)
         entries = timeEntries.entries
+        return result
     }
 
-    override fun clockOut(time: Instant) {
-        timeEntries.clockOut(time)
+    override fun clockOut(time: Instant): ClockResult {
+        val result = timeEntries.clockOut(time)
         entries = timeEntries.entries
+        return result
     }
 
     override fun undo() {
