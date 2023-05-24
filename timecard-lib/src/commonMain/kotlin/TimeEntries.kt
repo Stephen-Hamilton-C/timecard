@@ -36,7 +36,7 @@ class TimeEntries() : ITimeEntries {
         }
     }
 
-    override fun filterByDateRange(fromDate: LocalDate, toDate: LocalDate) {
+    override fun filterByDateRange(fromDate: LocalDate, toDate: LocalDate): List<TimeEntry> {
         return _entries.filter {
             val startDate = it.start.toLocalDate()
             val endDate = it.end?.toLocalDate()
@@ -48,6 +48,14 @@ class TimeEntries() : ITimeEntries {
                 startDateInRange || (endDate >= fromDate && endDate <= toDate)
             }
         }
+    }
+
+    override fun clean(pastDate: LocalDate): CleanResult {
+        val cleanedEntries = filterByDateRange(pastDaste)
+        if(_entries.size == cleanedEntries.size) return CleanResult.NO_OP
+
+        _entries = cleanedEntries.toMutableList()
+        return CleanResult.SUCCESS
     }
 
     private fun timeIsFuture(time: Instant): Boolean {

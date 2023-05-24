@@ -33,6 +33,10 @@ class TimeEntriesModel : ViewModel(), ITimeEntries {
         return _timeEntries.filterByDateRange(fromDate, toDate)
     }
 
+    override fun clean(pastDate: LocalDate): CleanResult {
+        return _timeEntries.clean(pastDate)
+    }
+
     override fun clockIn(time: Instant): ClockResult {
         val result = _timeEntries.clockIn(time)
         entries = _timeEntries.entries
