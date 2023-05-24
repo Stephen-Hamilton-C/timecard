@@ -1,3 +1,4 @@
+// TODO: Delete this file when Gradle project is completely setup
 pluginManagement {
     repositories {
         google()
