@@ -24,8 +24,8 @@ class TimeEntries() : ITimeEntries {
 
     override fun filterByDate(date: LocalDate): List<TimeEntry> {
         return _entries.filter {
-            val startDate = it.start.toLocalDateTime(TimeZone.currentSystemDefault()).date
-            val endDate = it.end?.toLocalDateTime(TimeZone.currentSystemDefault()).date
+            val startDate = it.start.toLocalDate()
+            val endDate = it.end?.toLocalDate()
             return if(endDate == null) {
                 startDate == date
             } else {
@@ -68,7 +68,7 @@ class TimeEntries() : ITimeEntries {
         return ClockResult.SUCCESS
     }
 
-    override fun undo() {
+    override fun undo(): UndoResult {
         if(_entries.isEmpty()) return UndoResult.NO_OP
 
         if(isClockedIn) {
