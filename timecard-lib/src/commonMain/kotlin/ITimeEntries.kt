@@ -9,10 +9,10 @@ interface ITimeEntries {
     fun load(data: String)
     override fun toString(): String
 
-    fun filterByDate(date: LocalDate = Util.today()): List<TimeEntry>
+    fun filterByDate(date: LocalDate = LocalDate.today()): List<TimeEntry>
     fun clockIn(time: Instant = Clock.System.now()): ClockResult
     fun clockOut(time: Instant = Clock.System.now()): ClockResult
     fun undo()
-    fun calculateMinutesWorked(date: LocalDate = Util.today()): Long
-    fun calculateMinutesOnBreak(date: LocalDate = Util.today()): Long
+    fun calculateMinutesWorked(date: LocalDate = LocalDate.today()): Long
+    fun calculateMinutesOnBreak(date: LocalDate = LocalDate.today()): Long
 }
