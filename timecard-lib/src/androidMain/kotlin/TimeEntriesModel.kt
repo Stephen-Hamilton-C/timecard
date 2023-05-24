@@ -41,9 +41,10 @@ class TimeEntriesModel : ViewModel(), ITimeEntries {
         return result
     }
 
-    override fun undo() {
-        timeEntries.undo()
+    override fun undo(): UndoResult {
+        val result = timeEntries.undo()
         entries = timeEntries.entries
+        return result
     }
 
     override fun calculateMinutesWorked(date: LocalDate): Long {

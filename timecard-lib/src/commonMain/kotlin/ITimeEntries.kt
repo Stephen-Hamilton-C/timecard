@@ -12,7 +12,7 @@ interface ITimeEntries {
     fun filterByDate(date: LocalDate = LocalDate.today()): List<TimeEntry>
     fun clockIn(time: Instant = Clock.System.now()): ClockResult
     fun clockOut(time: Instant = Clock.System.now()): ClockResult
-    fun undo()
+    fun undo(): UndoResult
     fun calculateMinutesWorked(date: LocalDate = LocalDate.today()): Long
     fun calculateMinutesOnBreak(date: LocalDate = LocalDate.today()): Long
 }
