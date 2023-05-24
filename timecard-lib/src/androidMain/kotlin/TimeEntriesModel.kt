@@ -14,44 +14,48 @@ class TimeEntriesModel : ViewModel(), ITimeEntries {
     override val isClockedOut: Boolean
         get() = !isClockedIn
 
-    private val timeEntries = TimeEntries()
+    private val _timeEntries = TimeEntries()
 
     override fun load(data: String) {
-        timeEntries.load(data)
-        entries = timeEntries.entries
+        _timeEntries.load(data)
+        entries = _timeEntries.entries
     }
 
     override fun toString(): String {
-        return timeEntries.toString()
+        return _timeEntries.toString()
     }
 
-    override fun filterByDate(date: LocalDate): List<TimeEntry> {
-        return timeEntries.filterByDate(date)
+    override fun filterByDay(date: LocalDate): List<TimeEntry> {
+        return _timeEntries.filterByDay(date)
+    }
+
+    override fun filterByDateRange(fromDate: LocalDate, toDate: LocalDate): List<TimeEntry> {
+        return _timeEntries.filterByDateRange(fromDate, toDate)
     }
 
     override fun clockIn(time: Instant): ClockResult {
-        val result = timeEntries.clockIn(time)
-        entries = timeEntries.entries
+        val result = _timeEntries.clockIn(time)
+        entries = _timeEntries.entries
         return result
     }
 
     override fun clockOut(time: Instant): ClockResult {
-        val result = timeEntries.clockOut(time)
-        entries = timeEntries.entries
+        val result = _timeEntries.clockOut(time)
+        entries = _timeEntries.entries
         return result
     }
 
     override fun undo(): UndoResult {
-        val result = timeEntries.undo()
-        entries = timeEntries.entries
+        val result = _timeEntries.undo()
+        entries = _timeEntries.entries
         return result
     }
 
     override fun calculateMinutesWorked(date: LocalDate): Long {
-        return timeEntries.calculateMinutesWorked(date)
+        return _timeEntries.calculateMinutesWorked(date)
     }
 
     override fun calculateMinutesOnBreak(date: LocalDate): Long {
-        return timeEntries.calculateMinutesOnBreak(date)
+        return _timeEntries.calculateMinutesOnBreak(date)
     }
 }

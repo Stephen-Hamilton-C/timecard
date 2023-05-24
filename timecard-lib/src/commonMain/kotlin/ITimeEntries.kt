@@ -9,7 +9,8 @@ interface ITimeEntries {
     fun load(data: String)
     override fun toString(): String
 
-    fun filterByDate(date: LocalDate = LocalDate.today()): List<TimeEntry>
+    fun filterByDay(date: LocalDate = LocalDate.today()): List<TimeEntry>
+    fun filterByDateRange(fromDate: LocalDate, toDate: LocalDate = LocalDate.today()): List<TimeEntry>
     fun clockIn(time: Instant = Clock.System.now()): ClockResult
     fun clockOut(time: Instant = Clock.System.now()): ClockResult
     fun undo(): UndoResult

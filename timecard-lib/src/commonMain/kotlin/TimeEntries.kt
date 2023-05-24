@@ -22,14 +22,30 @@ class TimeEntries() : ITimeEntries {
     }
     override fun toString(): String = _entries.joinToString(";")
 
-    override fun filterByDate(date: LocalDate): List<TimeEntry> {
+    override fun filterByDay(date: LocalDate): List<TimeEntry> {
         return _entries.filter {
             val startDate = it.start.toLocalDate()
             val endDate = it.end?.toLocalDate()
+            val startDateInDay = startDate == date
+
             return if(endDate == null) {
-                startDate == date
+                startDateInDay
             } else {
-                startDate == date || endDate == date
+                startDateInDay || endDate == date
+            }
+        }
+    }
+
+    override fun filterByDateRange(fromDate: LocalDate, toDate: LocalDate) {
+        return _entries.filter {
+            val startDate = it.start.toLocalDate()
+            val endDate = it.end?.toLocalDate()
+            val startDateInRange = startDate >= fromDate && startDate <= toDate
+
+            return if(endDate == null) {
+                startDateInRange
+            } else {
+                startDateInRange || (endDate >= fromDate && endDate <= toDate)
             }
         }
     }
