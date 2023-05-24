@@ -28,7 +28,8 @@ kotlin {
     sourceSets {
         nativeMain {
             // TODO: Look into kotlinx-cli for arg parsing: https://github.com/Kotlin/kotlinx-cli
-            // TODO: Look into Okio for I/O: https://square.github.io/okio/
+            // TODO: Use Korio for I/O: https://docs.korge.org/korio/
+            // TODO: Finish kt-appdirs and add it here as a dependency
         }
         nativeTest {
 
